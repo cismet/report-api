@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://cismet.de/projecttracker/report/commons/holidayConfig"
+    xmlns:hc="http://cismet.de/projecttracker/report/commons/holidayConfig"
+    elementFormDefault="qualified">
+
+    <xsd:element name="holidayConfig" type="hc:HolidayConfig" />
+
+    <xsd:complexType name="HolidayConfig">
+        <xsd:sequence>
+            <xsd:element name="holiday" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="name" type="xsd:string" />
+                        <xsd:element name="isHalfHoliday" type="xsd:boolean" />
+                        <xsd:element name="time" type="hc:Time" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Time">
+        <xsd:choice>
+            <xsd:element name="fixDate" type="hc:FixDate" />
+            <xsd:element name="dayAfterEaster" type="xsd:integer" />
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="FixDate">
+        <xsd:sequence>
+            <xsd:element name="date" type="xsd:date" />
+            <xsd:element name="isEveryYear" type="xsd:boolean" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>

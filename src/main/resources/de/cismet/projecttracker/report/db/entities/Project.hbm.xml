@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 14, 2009 3:02:44 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.Project" schema="public" table="project">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">project_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one cascade="none" class="de.cismet.projecttracker.report.db.entities.ProjectBody" fetch="select" name="projectBody">
+      <column name="projectbodyid"/>
+    </many-to-one>
+    <many-to-one cascade="none" class="de.cismet.projecttracker.report.db.entities.ProjectCategory" fetch="select" name="projectCategory">
+      <column name="categoryid"/>
+    </many-to-one>
+    <many-to-one cascade="none" class="de.cismet.projecttracker.report.db.entities.Project" fetch="select" name="project">
+      <column name="parentproject"/>
+    </many-to-one>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Staff" fetch="select" name="responsiblestaff">
+      <column name="responsiblestaff" not-null="false"/>
+    </many-to-one>
+    <property name="name" type="string">
+      <column length="50" name="name" not-null="true" unique="true"/>
+    </property>
+    <property name="description" type="string">
+      <column name="description"/>
+    </property>
+    <property name="overheadratio" type="double">
+      <column name="overheadratio" precision="6"/>
+    </property>
+    <property name="hoursofamanday" type="double">
+      <column name="hoursofamanday" precision="6"/>
+    </property>
+    <property name="daysofamanmonth" type="double">
+      <column name="daysofamanmonth" precision="6"/>
+    </property>
+    <property name="warnlevel" type="double">
+      <column name="warnlevel" not-null="true" precision="10"/>
+    </property>
+    <property name="criticallevel" type="double">
+      <column name="criticallevel" not-null="true" precision="10"/>
+    </property>
+    <property name="fullstoplevel" type="double">
+      <column name="fullstoplevel" not-null="true" precision="10"/>
+    </property>
+    <property name="overtimehoursallowed" type="boolean">
+      <column name="overtimehoursallowed"/>
+    </property>
+    <set cascade="all" fetch="subselect" inverse="true" name="workPackages">
+      <key>
+        <column name="project" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.WorkPackage"/>
+    </set>
+    <set inverse="true" name="projects">
+      <key>
+        <column name="parentproject"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.Project"/>
+    </set>
+    <set cascade="all" fetch="subselect" inverse="true" name="projectPeriods">
+      <key>
+        <column name="projectid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.ProjectPeriod"/>
+    </set>
+    <set cascade="delete" inverse="true" name="costCategories">
+      <key>
+        <column name="projectid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.CostCategory"/>
+    </set>
+    <set inverse="true" name="projectComponentTags">
+      <key>
+        <column name="projectid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.ProjectComponentTag"/>
+    </set>
+  </class>
+</hibernate-mapping>

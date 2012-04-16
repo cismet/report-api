@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 11, 2010 12:17:38 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.Travel" schema="public" table="travel">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">travel_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Staff" fetch="select" name="staff">
+      <column name="staffid" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Project" fetch="select" name="project">
+      <column name="projectid" not-null="false"/>
+    </many-to-one>
+    <property name="grossprice" type="double">
+      <column name="grossprice" not-null="true" precision="10"/>
+    </property>
+    <property name="netprice" type="double">
+      <column name="netprice" not-null="true" precision="10"/>
+    </property>
+    <property name="allowablevat" type="double">
+      <column name="allowablevat" precision="10"/>
+    </property>
+    <property name="date" type="timestamp">
+      <column length="29" name="date" not-null="true"/>
+    </property>
+    <property name="destination" type="string">
+      <column length="50" name="destination" not-null="true"/>
+    </property>
+    <property name="description" type="string">
+      <column name="description"/>
+    </property>
+    <property name="storagelocation" type="string">
+      <column length="100" name="storagelocation"/>
+    </property>
+    <property name="paymentdate" type="timestamp">
+      <column length="29" name="paymentdate"/>
+    </property>
+    <set cascade="delete-orphan" inverse="true" name="traveldocuments">
+      <key>
+        <column name="id" not-null="true" unique="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.TravelDocument"/>
+    </set>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 14, 2009 3:02:44 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.WorkPackage" schema="public" table="work_package">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">work_package_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.WorkPackage" fetch="select" name="workPackage">
+      <column name="parentworkpackage"/>
+    </many-to-one>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Project" fetch="select" name="project">
+      <column name="project" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.CostCategory" fetch="select" name="costCategory">
+      <column name="costcategoryid" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Staff" fetch="select" name="responsiblestaff">
+      <column name="responsiblestaff" not-null="false"/>
+    </many-to-one>
+    <property name="name" type="string">
+      <column length="50" name="name" not-null="true"/>
+    </property>
+    <property name="abbreviation" type="string">
+      <column length="50" name="abbreviation" not-null="false"/>
+    </property>
+    <property name="description" type="string">
+      <column name="description"/>
+    </property>
+    <property name="issubversion" type="boolean">
+      <column name="issubversion"/>
+    </property>
+    <property name="warnlevel" type="double">
+      <column name="warnlevel" not-null="true" precision="10"/>
+    </property>
+    <property name="criticallevel" type="double">
+      <column name="criticallevel" not-null="true" precision="10"/>
+    </property>
+    <property name="fullstoplevel" type="double">
+      <column name="fullstoplevel" not-null="true" precision="10"/>
+    </property>
+    <set cascade="delete-orphan" inverse="true" name="workPackages">
+      <key>
+        <column name="parentworkpackage"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.WorkPackage"/>
+    </set>
+    <set cascade="all" inverse="true" name="workPackagePeriods">
+      <key>
+        <column name="workpackageid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.WorkPackagePeriod"/>
+    </set>
+    <set inverse="true" lazy="true" name="activityWorkPackages">
+      <key>
+        <column name="workpackageid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.Activity"/>
+    </set>
+    <set cascade="all" inverse="false" name="projectComponentTags" table="project_component_tag_project_component">
+      <key>
+        <column name="projectcomponentid" not-null="true"/>
+      </key>
+      <many-to-many entity-name="de.cismet.projecttracker.report.db.entities.ProjectComponentTag">
+        <column name="projectcomponenttagid" not-null="true"/>
+      </many-to-many>
+    </set>
+    <set cascade="all" inverse="true" name="estimatedWorkPackageCosts">
+      <key>
+        <column name="workpackageid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.EstimatedComponentCost"/>
+    </set>
+    <set cascade="all" inverse="true" name="workPackageProgresses">
+      <key>
+        <column name="id" not-null="true" unique="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.WorkPackageProgress"/>
+    </set>
+  </class>
+</hibernate-mapping>

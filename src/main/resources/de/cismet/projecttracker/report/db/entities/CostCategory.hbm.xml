@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 14, 2009 3:02:44 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.CostCategory" schema="public" table="cost_category">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">cost_category_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Project" fetch="select" name="project">
+      <column name="projectid" not-null="true"/>
+    </many-to-one>
+    <property name="description" type="string">
+      <column name="description" not-null="false"/>
+    </property>
+    <property name="name" type="string">
+      <column name="name" not-null="true"/>
+    </property>
+    <property name="fundingrate" type="double">
+      <column name="fundingrate" not-null="true" precision="6"/>
+    </property>
+    <property name="vat" type="double">
+      <column name="vat" not-null="true" precision="4"/>
+    </property>
+    <set cascade="all-delete-orphan" inverse="true" name="projectCosts">
+      <key>
+        <column name="costcategoryid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.ProjectCosts"/>
+    </set>
+    <set fetch="subselect" inverse="true" lazy="true" name="workPackages">
+      <key>
+        <column name="costcategoryid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.WorkPackage"/>
+    </set>
+  </class>
+</hibernate-mapping>

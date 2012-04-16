@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 14, 2009 3:02:44 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.EstimatedComponentCost" schema="public" table="estimated_work_package_cost">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">estimated_work_package_cost_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.WorkPackage" fetch="select" name="workPackage">
+      <column name="workpackageid" not-null="true"/>
+    </many-to-one>
+    <property name="creationtime" type="timestamp">
+      <column length="29" name="creationtime" not-null="true"/>
+    </property>
+    <!--property name="workinghours" type="double">
+      <column name="workinghours" not-null="true" precision="7"/>
+    </property>
+    <property name="fromdate" type="timestamp">
+      <column length="29" name="fromdate" not-null="true"/>
+    </property>
+    <property name="todate" type="timestamp">
+      <column length="29" name="todate" not-null="true"/>
+    </property>
+    <property name="costsperhour" type="double">
+      <column name="costsperhour" not-null="true" precision="10"/>
+    </property>
+    <property name="overheadratio" type="double">
+      <column name="overheadratio" not-null="true" precision="6"/>
+    </property>
+    <property name="fundingratio" type="double">
+      <column name="fundingratio" not-null="true" precision="6"/>
+    </property-->
+    <set cascade="all" inverse="true" name="estimatedWorkPackageCostMonth">
+      <key>
+        <column name="estimationid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.EstimatedComponentCostMonth"/>
+    </set>
+  </class>
+</hibernate-mapping>

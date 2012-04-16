@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.EstimatedComponentCostMonth" table="estimated_work_package_cost_month">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">estimated_work_package_cost_month_id_seq</param>
+      </generator>
+    </id>
+    <property name="workinghours" type="double">
+      <column name="workinghours" not-null="true" precision="10"/>
+    </property>
+    <property name="month" type="int">
+      <column name="month" not-null="true"/>
+    </property>
+    <property name="description" type="string">
+      <column name="description"/>
+    </property>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.EstimatedComponentCost" fetch="select" name="estimatedWorkPackageCost">
+      <column name="estimationid" not-null="true"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>
