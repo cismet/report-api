@@ -1,5 +1,6 @@
 package de.cismet.projecttracker.report.commons;
 
+import bsh.This;
 import de.cismet.projecttracker.report.commons.holidayconfig.HolidayConfItem;
 import de.cismet.projecttracker.report.commons.holidayconfig.HolidayConfiguration;
 import java.io.InputStream;
@@ -9,9 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
 
-
-
 public class HolidayEvaluator {
+
     private static Logger logger = Logger.getLogger("de.cismet.projecttracker.report.commons.Holidays");
     private static final String CONFIG_FILE = "/de/cismet/projecttracker/report/commons/holidayConfig.xml";
     private Vector<Holiday> holidays;
@@ -20,17 +20,14 @@ public class HolidayEvaluator {
     public final static int HALF_HOLIDAY = 1;
     public final static int WORKDAY = -1;
 
-
     public HolidayEvaluator() {
         this.year = 0;
         holidays = null;
     }
 
-
     /**
-     *	liefert -1, wenn der uebergebene Tag kein Feiertag ist,
-     *			 0 wenn der uebergebene Tag ein Feiertag ist
-     *			 1 wenn der uebergebene Tag ein halber Feiertag ist.
+     * liefert -1, wenn der uebergebene Tag kein Feiertag ist, 0 wenn der uebergebene Tag ein Feiertag ist 1 wenn der
+     * uebergebene Tag ein halber Feiertag ist.
      */
     public int isHoliday(GregorianCalendar day) {
         Holiday hol = getHolidayForDay(day);
@@ -46,7 +43,6 @@ public class HolidayEvaluator {
         }
     }
 
-    
     public String getNameOfHoliday(GregorianCalendar day) {
         Holiday hol = getHolidayForDay(day);
 
@@ -57,7 +53,6 @@ public class HolidayEvaluator {
         }
     }
 
-    
     private Holiday getHolidayForDay(GregorianCalendar day) {
         if (day.get(GregorianCalendar.YEAR) != this.year) {
             calculateHolidays(day.get(GregorianCalendar.YEAR));
@@ -72,10 +67,10 @@ public class HolidayEvaluator {
             return null;
         }
     }
-    
+
     /**
-     *	berechnet alle beweglichen Feiertage des Saarlandes und speichert diese im Vector holidays.
-     *	year bezeichnet das Jahr, fuer die die Feiertageberechnet werden sollen.
+     * berechnet alle beweglichen Feiertage des Saarlandes und speichert diese im Vector holidays. year bezeichnet das
+     * Jahr, fuer die die Feiertageberechnet werden sollen.
      */
     private void calculateHolidays(int year) {
         Holiday currentHoliday;
@@ -88,17 +83,17 @@ public class HolidayEvaluator {
         List<HolidayConfItem> holidayList = config.getHolidayList();
 
         for (HolidayConfItem singleHoliday : holidayList) {
-            currentHoliday = new Holiday( singleHoliday.getName() );
+            currentHoliday = new Holiday(singleHoliday.getName());
             tmp = new GregorianCalendar();
 
             if (singleHoliday.isHalfHoliday()) {
                 currentHoliday.setIsHalfDay(true);
             }
 
-            if (singleHoliday.getTime().getFixDate() != null ) {
-                tmp.setTimeInMillis( singleHoliday.getTime().getFixDate().getTimeInMillis() );
+            if (singleHoliday.getTime().getFixDate() != null) {
+                tmp.setTimeInMillis(singleHoliday.getTime().getFixDate().getTimeInMillis());
 
-                if ( singleHoliday.getTime().isEveryYear() ) {	//Feiertag ist jedes Jahr
+                if (singleHoliday.getTime().isEveryYear()) {	//Feiertag ist jedes Jahr
                     tmp.set(GregorianCalendar.YEAR, year);
                 } else {
                     if (tmp.get(GregorianCalendar.YEAR) != year) {
@@ -108,7 +103,7 @@ public class HolidayEvaluator {
             } else {
                 //Feiertag abhaengig von Ostern
                 tmp = (GregorianCalendar) easter.clone();
-                tmp.add( GregorianCalendar.DATE, singleHoliday.getTime().getDaysAfterEaster() );
+                tmp.add(GregorianCalendar.DATE, singleHoliday.getTime().getDaysAfterEaster());
             }
             if (tmp != null) {
                 currentHoliday.setDate(tmp);
@@ -120,7 +115,50 @@ public class HolidayEvaluator {
     }
 
     /**
-     *	berechnet den Ostersonntag und liefert diesen als Rueckgabewert
+     * calculates the number of holidays between 2 Dates (including the interval bounds). 
+     * @param fromDate
+     * @param toDate
+     * @return 
+     */
+    public int getNumberOfHolidays(GregorianCalendar fromDate, GregorianCalendar toDate) {
+        //calculate the number of years
+        final int fromYear = fromDate.get(GregorianCalendar.YEAR);
+        final int toYear = toDate.get(GregorianCalendar.YEAR);
+        int holidays = 0;
+
+        for (int i = fromYear; i <= toYear; i++) {
+            if (i != this.year) {
+                calculateHolidays(i);
+            }
+            holidays += this.holidays.size();
+
+            // only add holidays before the toDate and after fromDate...
+            if (i == toYear) {
+                final int insertionIndex = Collections.binarySearch(this.holidays, new Holiday(fromDate));
+                if (insertionIndex >= 0) {
+                    //holiday found
+                    holidays -= insertionIndex;
+                } else {
+                    holidays -= -(insertionIndex+1);
+                }
+            }
+            if (i == fromYear) {
+                final int insertionIndex = Collections.binarySearch(this.holidays, new Holiday(toDate));
+
+                if (insertionIndex >= 0) {
+                    //holiday found
+                    holidays -= (this.holidays.size()-(insertionIndex+1));
+                } else {
+                    holidays -= this.holidays.size() + (insertionIndex+1);
+                }
+            }
+        }
+
+        return holidays;
+    }
+
+    /**
+     * berechnet den Ostersonntag und liefert diesen als Rueckgabewert
      */
     private GregorianCalendar getEaster(int year) {
         int D;
@@ -131,7 +169,6 @@ public class HolidayEvaluator {
         easter.add(GregorianCalendar.DATE, days);
         return easter;
     }
-
 
     private HolidayConfiguration getConfiguration() {
         HolidayConfiguration configFile = null;
@@ -167,5 +204,15 @@ public class HolidayEvaluator {
 
         return configFile;
     }
-}
 
+    public static void main(String[] args) {
+        GregorianCalendar y1 = new GregorianCalendar(2012,0, 1);
+        GregorianCalendar y2 = new GregorianCalendar(2013, 0, 1);
+
+        HolidayEvaluator hev = new HolidayEvaluator();
+        hev.calculateHolidays(2012);
+        logger.info("Holidays 2012: " + hev.holidays.size());
+
+        logger.info("Holidays 01.01.2012 - 31.12.2012: " + hev.getNumberOfHolidays(y1, y2));
+    }
+}
