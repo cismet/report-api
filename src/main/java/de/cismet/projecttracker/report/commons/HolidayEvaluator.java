@@ -115,12 +115,13 @@ public class HolidayEvaluator {
     }
 
     /**
-     * calculates the number of holidays between 2 Dates (including the interval bounds). 
+     * calculates the number of holidays between 2 Dates (including the interval bounds).
+     *
      * @param fromDate
      * @param toDate
-     * @return 
+     * @return
      */
-    public int getNumberOfHolidays(GregorianCalendar fromDate, GregorianCalendar toDate) {
+    public int getNumberOfHolidaysOnWeekDays(GregorianCalendar fromDate, GregorianCalendar toDate) {
         //calculate the number of years
         final int fromYear = fromDate.get(GregorianCalendar.YEAR);
         final int toYear = toDate.get(GregorianCalendar.YEAR);
@@ -131,27 +132,59 @@ public class HolidayEvaluator {
                 calculateHolidays(i);
             }
             holidays += this.holidays.size();
+            //dont count Holidays that are on saturday or sunday
+            if (i != fromYear && i != toYear) {
+                for (Holiday h : this.holidays) {
+                    final int dayOfWeek = h.getDate().get(GregorianCalendar.DAY_OF_WEEK);
+
+                    if (dayOfWeek == GregorianCalendar.SATURDAY || dayOfWeek == GregorianCalendar.SUNDAY) {
+                        holidays--;
+                    }
+                }
+            }
 
             // only add holidays before the toDate and after fromDate...
-            if (i == toYear) {
+            if (i == fromYear) {
                 final int insertionIndex = Collections.binarySearch(this.holidays, new Holiday(fromDate));
                 if (insertionIndex >= 0) {
                     //holiday found
                     holidays -= insertionIndex;
                 } else {
-                    holidays -= -(insertionIndex+1);
+                    holidays -= -(insertionIndex + 1);
+                }
+
+
+                for (int j = insertionIndex >= 0 ? insertionIndex : -(insertionIndex + 1); j < this.holidays.size(); j++) {
+                    final Holiday h = this.holidays.get(j);
+                    final int dayOfWeek = h.getDate().get(GregorianCalendar.DAY_OF_WEEK);
+                    if (dayOfWeek == GregorianCalendar.SATURDAY || dayOfWeek == GregorianCalendar.SUNDAY) {
+                        if (h.getDate().before(toDate)) {
+                            holidays--;
+                        }
+                    }
                 }
             }
-            if (i == fromYear) {
+            if (i == toYear) {
                 final int insertionIndex = Collections.binarySearch(this.holidays, new Holiday(toDate));
 
                 if (insertionIndex >= 0) {
                     //holiday found
-                    holidays -= (this.holidays.size()-(insertionIndex+1));
+                    holidays -= (this.holidays.size() - (insertionIndex + 1));
                 } else {
-                    holidays -= this.holidays.size() + (insertionIndex+1);
+                    holidays -= this.holidays.size() + (insertionIndex + 1);
+                }
+
+                for (int j = insertionIndex >= 0 ? insertionIndex : -insertionIndex; j >= 0; j--) {
+                    final Holiday h = this.holidays.get(j);
+                    final int dayOfWeek = h.getDate().get(GregorianCalendar.DAY_OF_WEEK);
+                    if (dayOfWeek == GregorianCalendar.SATURDAY || dayOfWeek == GregorianCalendar.SUNDAY) {
+                        if (h.getDate().after(fromDate)) {
+                            holidays--;
+                        }
+                    }
                 }
             }
+
         }
 
         return holidays;
@@ -203,16 +236,5 @@ public class HolidayEvaluator {
         }
 
         return configFile;
-    }
-
-    public static void main(String[] args) {
-        GregorianCalendar y1 = new GregorianCalendar(2012,0, 1);
-        GregorianCalendar y2 = new GregorianCalendar(2013, 0, 1);
-
-        HolidayEvaluator hev = new HolidayEvaluator();
-        hev.calculateHolidays(2012);
-        logger.info("Holidays 2012: " + hev.holidays.size());
-
-        logger.info("Holidays 01.01.2012 - 31.12.2012: " + hev.getNumberOfHolidays(y1, y2));
     }
 }
