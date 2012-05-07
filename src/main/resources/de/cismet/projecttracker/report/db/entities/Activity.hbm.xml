@@ -19,7 +19,7 @@
       <column name="staffid" not-null="true"/>
     </many-to-one>
     <property name="day" type="timestamp">
-      <column length="29" name="day" not-null="true"/>
+      <column length="29" name="day" not-null="false"/>
     </property>
     <property name="workinghours" type="double">
       <column name="workinghours" not-null="true" precision="6"/>

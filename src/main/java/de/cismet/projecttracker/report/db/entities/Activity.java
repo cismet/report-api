@@ -106,7 +106,7 @@ public class Activity extends BasicHibernateEntity {
     }
     
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "day", nullable = false, length = 29)
+    @Column(name = "day", nullable = true, length = 29)
     public Date getDay() {
         return this.day;
     }
