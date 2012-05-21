@@ -18,6 +18,9 @@
     <property name="permissions" type="int">
       <column name="permissions" not-null="true"/>
     </property>
+    <property name="lastmodification" type="timestamp">
+      <column length="29" name="lastmodification" not-null="false"/>
+    </property>
     <property name="username" type="string">
       <column length="50" name="username" not-null="true"/>
     </property>

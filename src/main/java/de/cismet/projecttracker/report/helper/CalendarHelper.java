@@ -112,6 +112,20 @@ public class CalendarHelper {
 
         return (firstDate <= secondDate);
     }
+    
+    /**
+     * compares two calendar objects
+     * @param date1
+     * @param date2
+     * @return true, if and only if date1 is less or equal to date2. The result
+     *               only depends on the dates, which are contained in the given GregorianCalendar objects. The times will be ignored.
+     */
+    public static boolean isDateLess(GregorianCalendar date1, GregorianCalendar date2) {
+        int firstDate = date1.get(GregorianCalendar.YEAR) * 10000 + date1.get(GregorianCalendar.MONTH) * 100 + date1.get(GregorianCalendar.DATE);
+        int secondDate = date2.get(GregorianCalendar.YEAR) * 10000 + date2.get(GregorianCalendar.MONTH) * 100 + date2.get(GregorianCalendar.DATE);
+
+        return (firstDate < secondDate);
+    }
 
 
    /**
@@ -139,6 +153,24 @@ public class CalendarHelper {
                  holidays.isHoliday(day) == HolidayEvaluator.WORKDAY);
     }
 
+    /**
+     * return 1 if the day is a working day, 0 if the day is no working day and 0.5 if the day is a half holiday
+     */
+    public static double isWorkingDayExactly(GregorianCalendar day) {
+        if (day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY  
+                || day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+            return 0.0;
+        }
+        int holiday = holidays.isHoliday(day);
+        
+        if (holiday == -1) {
+            return 1.0;
+        } else if (holiday == 0) {
+            return 0.0;
+        } else {
+            return 0.5;
+        }
+    }
     
     /**
      * @param cal

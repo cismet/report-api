@@ -2,6 +2,7 @@ package de.cismet.projecttracker.report.db.entities;
 
 import de.cismet.projecttracker.report.helper.CalendarHelper;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -149,7 +150,14 @@ public class Activity extends BasicHibernateEntity {
 
     @Override
     public String toString() {
-        return CalendarHelper.toDateString( day ) + "\n" + workPackage.getName() + "\n" + description + "\n" + workinghours;
+        if (kindofactivity == 0) {
+            return CalendarHelper.toDateString( day ) + "\n" + (workPackage != null ? workPackage.getName() : "") + "\n" + description + "\n" + workinghours;
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date dayDate = new Date(day.getTime());
+            String action = (kindofactivity == 1 ? "COME" : "GO");
+            return action + " at " + formatter.format(dayDate);
+        }
     }
     
     

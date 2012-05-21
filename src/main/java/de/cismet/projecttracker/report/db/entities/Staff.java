@@ -1,13 +1,9 @@
 package de.cismet.projecttracker.report.db.entities;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "staff", schema = "public")
@@ -20,11 +16,12 @@ public class Staff extends BasicHibernateEntity {
     private byte[] password;
     private Set<Contract> contracts = new HashSet<Contract>(0);
     private Set<Activity> activities = new HashSet<Activity>(0);
+    private Date lastmodification;
 
     public Staff() {
     }
 
-    public Staff(long id, String firstname, String name, int permissions, String username, String email, byte[] password) {
+    public Staff(long id, String firstname, String name, int permissions, String username, String email, byte[] password, Date lastmodification) {
         this.id = id;
         this.firstname = firstname;
         this.name = name;
@@ -32,9 +29,10 @@ public class Staff extends BasicHibernateEntity {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.lastmodification = lastmodification;
     }
 
-    public Staff(long id, String firstname, String name, int permissions, String username, String email, byte[] password, Set<Contract> contracts, Set<Activity> activities) {
+    public Staff(long id, String firstname, String name, int permissions, String username, String email, byte[] password, Date lastmodification, Set<Contract> contracts, Set<Activity> activities) {
         this.id = id;
         this.firstname = firstname;
         this.name = name;
@@ -44,6 +42,7 @@ public class Staff extends BasicHibernateEntity {
         this.contracts = contracts;
         this.activities = activities;
         this.email = email;
+        this.lastmodification = lastmodification;
     }
 
     @Column(name = "firstname", nullable = false, length = 50)
@@ -100,6 +99,17 @@ public class Staff extends BasicHibernateEntity {
         this.password = password;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "lastmodification", nullable = true, length = 29)
+    public Date getLastmodification() {
+        return lastmodification;
+    }
+
+    public void setLastmodification(Date lastmodification) {
+        this.lastmodification = lastmodification;
+    }
+    
+    
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "staff")
     public Set<Contract> getContracts() {
         return this.contracts;
