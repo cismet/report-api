@@ -26,6 +26,7 @@ public class WorkPackage extends BasicHibernateEntity {
     private Staff responsiblestaff;
     private String name;
     private String description;
+    private String expirationDescription;
     private String abbreviation;
     private double warnlevel;
     private double criticallevel;
@@ -138,6 +139,14 @@ public class WorkPackage extends BasicHibernateEntity {
         this.description = description;
     }
 
+    public String getExpirationDescription() {
+        return expirationDescription;
+    }
+
+    public void setExpirationDescription(String expirationDescription) {
+        this.expirationDescription = expirationDescription;
+    }
+    
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "workPackage")
     public Set<WorkPackage> getWorkPackages() {
         return this.workPackages;

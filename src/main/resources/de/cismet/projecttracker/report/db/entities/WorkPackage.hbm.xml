@@ -30,6 +30,9 @@
     <property name="description" type="string">
       <column name="description"/>
     </property>
+    <property name="expirationDescription" type="string">
+        <column name="expirationdescription"/>
+    </property>
     <property name="issubversion" type="boolean">
       <column name="issubversion"/>
     </property>

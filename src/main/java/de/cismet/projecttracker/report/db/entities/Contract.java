@@ -23,6 +23,7 @@ public class Contract extends BasicHibernateEntity {
     private Date fromdate;
     private Date todate;
     private double whow;
+    private int vacation;
     private Set<ContractDocument> contractDocuments = new HashSet<ContractDocument>(0);
 
     public Contract() {
@@ -93,6 +94,15 @@ public class Contract extends BasicHibernateEntity {
 
     public void setWhow(double whow) {
         this.whow = whow;
+    }
+    
+    @Column(name = "vacation", nullable = true)
+    public int getVacation(){
+        return this.vacation;
+    }
+    
+    public void setVacation(int vacation){
+        this.vacation = vacation;
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "contract")

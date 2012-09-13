@@ -2,33 +2,36 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Jul 14, 2009 3:02:44 PM by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
-  <class name="de.cismet.projecttracker.report.db.entities.Contract" schema="public" table="contract">
-    <id name="id" type="long">
-      <column name="id"/>
-      <generator class="sequence">
-        <param name="sequence">contract_id_seq</param>
-      </generator>
-    </id>
-    <many-to-one class="de.cismet.projecttracker.report.db.entities.Staff" fetch="select" name="staff">
-      <column name="staffid" not-null="true"/>
-    </many-to-one>
-    <many-to-one class="de.cismet.projecttracker.report.db.entities.Company" fetch="select" name="company">
-      <column name="company" not-null="true"/>
-    </many-to-one>
-    <property name="fromdate" type="timestamp">
-      <column length="29" name="fromdate" not-null="true"/>
-    </property>
-    <property name="todate" type="timestamp">
-      <column length="29" name="todate"/>
-    </property>
-    <property name="whow" type="double">
-      <column name="whow" not-null="true" precision="5"/>
-    </property>
-    <set cascade="all" inverse="true" lazy="false" name="contractDocuments">
-      <key>
-        <column name="contractid"/>
-      </key>
-      <one-to-many class="de.cismet.projecttracker.report.db.entities.ContractDocument"/>
-    </set>
-  </class>
+    <class name="de.cismet.projecttracker.report.db.entities.Contract" schema="public" table="contract">
+        <id name="id" type="long">
+            <column name="id"/>
+            <generator class="sequence">
+                <param name="sequence">contract_id_seq</param>
+            </generator>
+        </id>
+        <many-to-one class="de.cismet.projecttracker.report.db.entities.Staff" fetch="select" name="staff">
+            <column name="staffid" not-null="true"/>
+        </many-to-one>
+        <many-to-one class="de.cismet.projecttracker.report.db.entities.Company" fetch="select" name="company">
+            <column name="company" not-null="true"/>
+        </many-to-one>
+        <property name="fromdate" type="timestamp">
+            <column length="29" name="fromdate" not-null="true"/>
+        </property>
+        <property name="todate" type="timestamp">
+            <column length="29" name="todate"/>
+        </property>
+        <property name="whow" type="double">
+            <column name="whow" not-null="true" precision="5"/>
+        </property>
+        <property name="vacation" type="integer">
+            <column name="vacation" not-null="false"/>
+        </property>
+        <set cascade="all" inverse="true" lazy="false" name="contractDocuments">
+            <key>
+                <column name="contractid"/>
+            </key>
+            <one-to-many class="de.cismet.projecttracker.report.db.entities.ContractDocument"/>
+        </set>
+    </class>
 </hibernate-mapping>
