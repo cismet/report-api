@@ -42,5 +42,8 @@
       </key>
       <one-to-many class="de.cismet.projecttracker.report.db.entities.Activity"/>
     </set>
+     <many-to-one class="de.cismet.projecttracker.report.db.entities.Profile" fetch="select" name="profile">
+      <column name="profileid" not-null="false"/>
+    </many-to-one>
   </class>
 </hibernate-mapping>

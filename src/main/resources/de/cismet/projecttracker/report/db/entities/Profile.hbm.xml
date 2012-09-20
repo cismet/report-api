@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 14, 2009 3:02:44 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="de.cismet.projecttracker.report.db.entities.Profile" schema="public" table="profile">
+        <id name="id" type="long">
+            <column name="id"/>
+            <generator class="sequence">
+                <param name="sequence">profile_id_seq</param>
+            </generator>
+        </id>
+        <property name="weekLockMode" type="boolean">
+            <column  name="week_lock" not-null="true"/>
+        </property>
+        <property name="autoPauseEnabled" type="boolean">
+            <column name="auto_pause" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

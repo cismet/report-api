@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "staff", schema = "public")
 public class Staff extends BasicHibernateEntity {
+
     private String firstname;
     private String name;
     private int permissions;
@@ -17,6 +18,7 @@ public class Staff extends BasicHibernateEntity {
     private Set<Contract> contracts = new HashSet<Contract>(0);
     private Set<Activity> activities = new HashSet<Activity>(0);
     private Date lastmodification;
+    private Profile profile;
 
     public Staff() {
     }
@@ -108,8 +110,7 @@ public class Staff extends BasicHibernateEntity {
     public void setLastmodification(Date lastmodification) {
         this.lastmodification = lastmodification;
     }
-    
-    
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "staff")
     public Set<Contract> getContracts() {
         return this.contracts;
@@ -127,6 +128,14 @@ public class Staff extends BasicHibernateEntity {
     public void setActivities(Set<Activity> activities) {
         this.activities = activities;
     }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "profileid", nullable = true)
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 }
-
-
