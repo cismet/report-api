@@ -155,7 +155,15 @@ public class Activity extends BasicHibernateEntity {
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date dayDate = new Date(day.getTime());
+            //TODO lock day action 
             String action = (kindofactivity == 1 ? "COME" : "GO");
+            if(kindofactivity == 1){
+                action = "COME";
+            }else if(kindofactivity == 3){
+                action = "LOCK";
+            }else{
+                action = "GO";
+            }
             return action + " at " + formatter.format(dayDate);
         }
     }
