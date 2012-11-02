@@ -9,11 +9,20 @@
                 <param name="sequence">profile_id_seq</param>
             </generator>
         </id>
-        <property name="weekLockMode" type="boolean">
+        <property name="weekLockModeEnabled" type="boolean">
             <column  name="week_lock" not-null="true"/>
         </property>
         <property name="autoPauseEnabled" type="boolean">
             <column name="auto_pause" not-null="true"/>
+        </property>
+        <property name="dayLockModeEnabled" type="boolean">
+            <column name="day_lock" not-null="true"/>
+        </property>
+        <property name="autoPauseDuration" type="double">
+            <column name="auto_pause_duration" not-null="true"  precision="6"/>
+        </property>
+        <property name="residualVacation" type="double">
+            <column name="residual_vacation" not-null="true" precision="6"/>
         </property>
     </class>
 </hibernate-mapping>

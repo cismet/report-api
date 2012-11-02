@@ -15,7 +15,10 @@ import javax.persistence.*;
 public class Profile extends BasicHibernateEntity {
 
     private boolean autoPauseEnabled;
-    private boolean weekLockMode;
+    private boolean weekLockModeEnabled;
+    private boolean dayLockModeEnabled;
+    private double autoPauseDuration;
+    private double residualVacation;
     
     public Profile(){
         
@@ -23,7 +26,7 @@ public class Profile extends BasicHibernateEntity {
 
     public Profile( boolean autoPauseEnabled, boolean weekLockMode) {
         this.autoPauseEnabled = autoPauseEnabled;
-        this.weekLockMode = weekLockMode;
+        this.weekLockModeEnabled = weekLockMode;
     }
 
     @Column(name = "auto_pause", nullable = false)
@@ -36,12 +39,39 @@ public class Profile extends BasicHibernateEntity {
     }
 
     @Column(name = "week_lock", nullable = false)
-    public boolean getWeekLockMode() {
-        return weekLockMode;
+    public boolean getWeekLockModeEnabled() {
+        return weekLockModeEnabled;
     }
 
-    public void setWeekLockMode(boolean weekLockMode) {
-        this.weekLockMode = weekLockMode;
+    public void setWeekLockModeEnabled(boolean weekLockMode) {
+        this.weekLockModeEnabled = weekLockMode;
+    }
+
+     @Column(name = "day_lock", nullable = false)
+    public boolean getDayLockModeEnabled() {
+        return dayLockModeEnabled;
+    }
+
+    public void setDayLockModeEnabled(boolean dayLockModeEnabled) {
+        this.dayLockModeEnabled = dayLockModeEnabled;
+    }
+
+     @Column(name = "auto_pause_time", nullable = false)
+    public double getAutoPauseDuration() {
+        return autoPauseDuration;
+    }
+
+    public void setAutoPauseDuration(double autoPauseDuration) {
+        this.autoPauseDuration = autoPauseDuration;
+    }
+
+     @Column(name = "residual_vacation", nullable = false)
+    public double getResidualVacation() {
+        return residualVacation;
+    }
+
+    public void setResidualVacation(double residualVacation) {
+        this.residualVacation = residualVacation;
     }
 
 }
