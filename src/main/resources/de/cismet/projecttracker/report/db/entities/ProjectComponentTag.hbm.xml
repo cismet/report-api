@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 1, 2010 3:57:04 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.ProjectComponentTag" schema="public" table="project_component_tag">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">project_component_tag_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Project" fetch="select" name="project">
+      <column name="projectid" not-null="true"/>
+    </many-to-one>
+    <property name="name" type="string">
+      <column length="50" name="name" not-null="true"/>
+    </property>
+    <set inverse="false" name="workPackages" table="project_component_tag_project_component">
+      <key>
+        <column name="projectcomponenttagid" not-null="true"/>
+      </key>
+      <many-to-many entity-name="de.cismet.projecttracker.report.db.entities.WorkPackage">
+        <column name="projectcomponentid" not-null="true"/>
+      </many-to-many>
+    </set>
+    <set cascade="all" inverse="false" name="projectComponentTagsForProjectcomponenttagdest" table="compatible_tags">
+      <key>
+        <column name="projectcomponenttagsource" not-null="true"/>
+      </key>
+      <many-to-many entity-name="de.cismet.projecttracker.report.db.entities.ProjectComponentTag">
+        <column name="projectcomponenttagdest" not-null="true"/>
+      </many-to-many>
+    </set>
+    <!--set name="projectComponentTagsForProjectcomponenttagsource" inverse="false" table="compatible_tags">
+            <key>
+                <column name="projectcomponenttagdest" not-null="true" />
+            </key>
+            <many-to-many entity-name="de.cismet.projecttracker.report.db.entities.ProjectComponentTag">
+                <column name="projectcomponenttagsource" not-null="true" />
+            </many-to-many>
+        </set-->
+  </class>
+</hibernate-mapping>

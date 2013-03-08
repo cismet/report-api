@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 14, 2009 3:02:44 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.Report" schema="public" table="report">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">report_id_seq</param>
+      </generator>
+    </id>
+    <property name="name" type="string">
+      <column length="50" name="name" not-null="true"/>
+    </property>
+    <property name="generatorname" type="string">
+      <column length="50" name="generatorname" not-null="true"/>
+    </property>
+    <property name="creationtime" type="timestamp">
+      <column length="29" name="creationtime" not-null="true"/>
+    </property>
+    <property name="fromdate" type="timestamp">
+      <column length="29" name="fromdate" not-null="true"/>
+    </property>
+    <property name="todate" type="timestamp">
+      <column length="29" name="todate" not-null="true"/>
+    </property>
+    <property lazy="true" name="reportdocument" type="binary">
+      <column name="reportdocument" not-null="true"/>
+    </property>
+    <many-to-one cascade="none" class="de.cismet.projecttracker.report.db.entities.Staff" fetch="select" name="staff">
+      <column name="staffid" not-null="false"/>
+    </many-to-one>
+    <!--if the cascade value of the activities property == delete or delete-orphan,
+    a deletion of a report causes the deletion of all activities which was used by the deleted report-->
+    <set cascade="none" inverse="false" lazy="true" name="activities" table="activity_report">
+      <key>
+        <column name="reportid" not-null="true"/>
+      </key>
+      <many-to-many entity-name="de.cismet.projecttracker.report.db.entities.Activity">
+        <column name="activityid" not-null="true"/>
+      </many-to-many>
+    </set>
+  </class>
+</hibernate-mapping>

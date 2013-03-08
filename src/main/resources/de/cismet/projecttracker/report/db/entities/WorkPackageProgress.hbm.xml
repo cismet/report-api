@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 5, 2010 11:20:09 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.WorkPackageProgress" schema="public" table="work_package_progress">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">work_package_progress_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.WorkPackage" fetch="select" insert="false" name="workPackage" update="false">
+      <column name="id" not-null="true" unique="true"/>
+    </many-to-one>
+    <property name="time" type="timestamp">
+      <column length="29" name="time" not-null="true"/>
+    </property>
+    <property name="progress" type="int">
+      <column name="progress" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

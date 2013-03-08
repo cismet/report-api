@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 14, 2009 3:02:44 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.Staff" schema="public" table="staff">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">staff_id_seq</param>
+      </generator>
+    </id>
+    <property name="firstname" type="string">
+      <column length="50" name="firstname" not-null="true"/>
+    </property>
+    <property name="name" type="string">
+      <column length="50" name="name" not-null="true"/>
+    </property>
+    <property name="permissions" type="int">
+      <column name="permissions" not-null="true"/>
+    </property>
+    <property name="lastmodification" type="timestamp">
+      <column length="29" name="lastmodification" not-null="false"/>
+    </property>
+    <property name="username" type="string">
+      <column length="50" name="username" not-null="true"/>
+    </property>
+    <property name="email" type="string">
+      <column length="100" name="email" not-null="false"/>
+    </property>
+    <property lazy="true" name="password" type="binary">
+      <column name="password" not-null="false"/>
+    </property>
+    <set inverse="true" name="contracts" lazy="false">
+      <key>
+        <column name="staffid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.Contract"/>
+    </set>
+    <set inverse="true" lazy="true" name="activities">
+      <key>
+        <column name="staffid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.Activity"/>
+    </set>
+     <many-to-one class="de.cismet.projecttracker.report.db.entities.Profile" fetch="select" name="profile">
+      <column name="profileid" not-null="false"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>

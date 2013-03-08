@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 11, 2009 5:22:22 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.RealOverhead" schema="public" table="real_overhead">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">real_overhead_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Company" fetch="select" name="company">
+      <column name="companyid" not-null="true"/>
+    </many-to-one>
+    <property name="overheadratio" type="double">
+      <column name="overheadratio" not-null="true"/>
+    </property>
+    <!--property name="fundingratio" type="double">
+      <column name="fundingratio" not-null="true"/>
+    </property-->
+    <property name="validfrom" type="timestamp">
+      <column length="29" name="validfrom" not-null="true"/>
+    </property>
+    <property name="validto" type="timestamp">
+      <column length="29" name="validto"/>
+    </property>
+  </class>
+</hibernate-mapping>

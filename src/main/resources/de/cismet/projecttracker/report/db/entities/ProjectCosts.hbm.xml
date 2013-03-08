@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.ProjectCosts" table="project_costs">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">project_costs_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.CostCategory" fetch="select" name="costCategory">
+      <column name="costcategoryid" not-null="true"/>
+    </many-to-one>
+    <property name="comment" type="string">
+      <column name="comment" not-null="false"/>
+    </property>
+    <property name="total" type="double">
+      <column name="total" not-null="true" precision="6"/>
+    </property>
+    <property name="time" type="timestamp">
+      <column length="29" name="time"/>
+    </property>
+  </class>
+</hibernate-mapping>

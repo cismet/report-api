@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 14, 2009 3:02:44 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.ContractDocument" schema="public" table="contract_document">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">contract_document_id_seq</param>
+      </generator>
+    </id>
+    <property lazy="true" name="document" type="binary">
+      <column name="document" not-null="true"/>
+    </property>
+    <property name="documentname" type="string">
+      <column name="documentname" not-null="true"/>
+    </property>
+    <property name="mimetype" type="string">
+      <column name="mimetype" not-null="false"/>
+    </property>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Contract" fetch="select" name="contract">
+      <column name="contractid"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>

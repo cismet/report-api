@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 11, 2009 5:22:22 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.Company" schema="public" table="company">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">company_id_seq</param>
+      </generator>
+    </id>
+    <property name="name" type="string">
+      <column length="100" name="name" not-null="true"/>
+    </property>
+    <set inverse="true" name="contracts">
+      <key>
+        <column name="company" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.Contract"/>
+    </set>
+    <set cascade="delete-orphan" inverse="true" name="realOverheads">
+      <key>
+        <column name="companyid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.RealOverhead"/>
+    </set>
+    <set cascade="delete-orphan" inverse="true" name="fundings">
+      <key>
+        <column name="companyid" not-null="true"/>
+      </key>
+      <one-to-many class="de.cismet.projecttracker.report.db.entities.Funding"/>
+    </set>
+  </class>
+</hibernate-mapping>

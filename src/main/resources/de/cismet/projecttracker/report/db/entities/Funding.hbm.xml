@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="de.cismet.projecttracker.report.db.entities.Funding" table="funding">
+    <id name="id" type="long">
+      <column name="id"/>
+      <generator class="sequence">
+        <param name="sequence">funding_id_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Company" fetch="select" name="company">
+      <column name="companyid" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="de.cismet.projecttracker.report.db.entities.Project" fetch="select" name="project">
+      <column name="projectid" not-null="true"/>
+    </many-to-one>
+    <property name="fundingratio" type="double">
+      <column name="fundingratio" not-null="true" precision="6"/>
+    </property>
+  </class>
+</hibernate-mapping>
