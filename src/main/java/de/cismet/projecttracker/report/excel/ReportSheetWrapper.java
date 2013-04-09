@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -13,25 +20,38 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 /**
+ * DOCUMENT ME!
  *
- * @author therter
+ * @author   therter
+ * @version  $Revision$, $Date$
  */
 public class ReportSheetWrapper implements Iterable<Row> {
+
+    //~ Static fields/initializers ---------------------------------------------
+
     private static Logger logger = Logger.getLogger(ReportSheetWrapper.class);
+
+    //~ Instance fields --------------------------------------------------------
+
     private HSSFSheet sheet;
     private HashMap<Integer, Integer> addedRows = new HashMap<Integer, Integer>();
     private int lastRowNumber = 0;
 
+    //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new ReportSheetWrapper object.
      *
-     * @param sheet
-     * @param useAsTemplate true, if a copy of the given sheet should be used
+     * @param  sheet          DOCUMENT ME!
+     * @param  useAsTemplate  true, if a copy of the given sheet should be used
      */
-    public ReportSheetWrapper(HSSFSheet sheet, boolean useAsTemplate) {
+    public ReportSheetWrapper(final HSSFSheet sheet, final boolean useAsTemplate) {
         if (useAsTemplate) {
-            this.sheet = sheet.getWorkbook().cloneSheet( sheet.getWorkbook().getSheetIndex(sheet) );
+            this.sheet = sheet.getWorkbook().cloneSheet(sheet.getWorkbook().getSheetIndex(sheet));
         } else {
             this.sheet = sheet;
         }
@@ -43,10 +63,18 @@ public class ReportSheetWrapper implements Iterable<Row> {
         lastRowNumber = sheet.getLastRowNum();
     }
 
+    //~ Methods ----------------------------------------------------------------
 
-    public int convertToInternalRowNumber(int row) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   row  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int convertToInternalRowNumber(final int row) {
         Integer result = addedRows.get(row);
-        
+
         if (result == null) {
             result = row;
             logger.warn("no internal row presentation found for row " + row, new Throwable());
@@ -55,18 +83,24 @@ public class ReportSheetWrapper implements Iterable<Row> {
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   rownum  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int insertRow(final int rownum) {
+        final Integer internalRowNum = convertToInternalRowNumber(rownum);
+        final int newRowNum = ++lastRowNumber;
+        sheet.shiftRows(internalRowNum, sheet.getLastRowNum(), 1, true, false, true);
+        sheet.createRow(internalRowNum);
 
-    public int insertRow(int rownum) {
-        Integer internalRowNum = convertToInternalRowNumber(rownum);
-        int newRowNum = ++lastRowNumber;
-        sheet.shiftRows( internalRowNum, sheet.getLastRowNum(), 1, true, false, true);
-        sheet.createRow( internalRowNum );
+        final Iterator<Integer> keys = addedRows.keySet().iterator();
 
-        Iterator<Integer> keys = addedRows.keySet().iterator();
-
-        while ( keys.hasNext() ) {
-            Integer key = keys.next();
-            Integer value = addedRows.get(key);
+        while (keys.hasNext()) {
+            final Integer key = keys.next();
+            final Integer value = addedRows.get(key);
 
             if (value >= internalRowNum) {
                 addedRows.put(key, value + 1);
@@ -78,22 +112,27 @@ public class ReportSheetWrapper implements Iterable<Row> {
 
         return newRowNum;
     }
-    
 
-    public void removeRow(int rowIndex) {
-        int internalRowNumber = convertToInternalRowNumber(rowIndex);
-        Iterator<Integer> keys = addedRows.keySet().iterator();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  rowIndex  DOCUMENT ME!
+     */
+    public void removeRow(final int rowIndex) {
+        final int internalRowNumber = convertToInternalRowNumber(rowIndex);
+        final Iterator<Integer> keys = addedRows.keySet().iterator();
 
-        Row row = getRow(rowIndex);
+        final Row row = getRow(rowIndex);
         if (row != null) {
-            sheet.removeRow( row );
+            sheet.removeRow(row);
         } else {
-           logger.error("row " + rowIndex + " with internal number " + internalRowNumber + "cannot be deleted, because it doesn't exist.");
+            logger.error("row " + rowIndex + " with internal number " + internalRowNumber
+                        + "cannot be deleted, because it doesn't exist.");
         }
 
-        while ( keys.hasNext() ) {
-            Integer key = keys.next();
-            Integer value = addedRows.get(key);
+        while (keys.hasNext()) {
+            final Integer key = keys.next();
+            final Integer value = addedRows.get(key);
 
             if (value > internalRowNumber) {
                 addedRows.put(key, value - 1);
@@ -102,27 +141,52 @@ public class ReportSheetWrapper implements Iterable<Row> {
         addedRows.remove(rowIndex);
     }
 
-    
-    public HSSFRow getRow(int rowIndex) {
-        return sheet.getRow( convertToInternalRowNumber(rowIndex) );
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   rowIndex  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public HSSFRow getRow(final int rowIndex) {
+        return sheet.getRow(convertToInternalRowNumber(rowIndex));
     }
 
-    public HSSFRow getAbsRow(int rowIndex) {
-        return sheet.getRow( rowIndex );
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   rowIndex  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public HSSFRow getAbsRow(final int rowIndex) {
+        return sheet.getRow(rowIndex);
     }
 
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public int getSheetIndex() {
         return sheet.getWorkbook().getSheetIndex(sheet);
     }
 
-    public int addMergedRegion(CellRangeAddress range) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   range  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int addMergedRegion(final CellRangeAddress range) {
         return sheet.addMergedRegion(range);
     }
 
     /**
-     * this allows the usage of foreach loops
-     * @return
+     * this allows the usage of foreach loops.
+     *
+     * @return  DOCUMENT ME!
      */
     @Override
     public Iterator<Row> iterator() {

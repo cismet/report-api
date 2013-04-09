@@ -1,33 +1,66 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.projecttracker.report.commons;
 
 import java.util.GregorianCalendar;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class Holiday implements Comparable<Holiday> {
+
+    //~ Instance fields --------------------------------------------------------
+
     private String name;
     private GregorianCalendar date;
     private boolean isHalfDay;
 
+    //~ Constructors -----------------------------------------------------------
 
+    /**
+     * Creates a new Holiday object.
+     */
     public Holiday() {
         this(null, null, false);
     }
 
-    
-    public Holiday(String name) {
+    /**
+     * Creates a new Holiday object.
+     *
+     * @param  name  DOCUMENT ME!
+     */
+    public Holiday(final String name) {
         this(name, null, false);
     }
 
-
-    public Holiday(GregorianCalendar date) {
+    /**
+     * Creates a new Holiday object.
+     *
+     * @param  date  DOCUMENT ME!
+     */
+    public Holiday(final GregorianCalendar date) {
         this(null, date, false);
     }
 
-
-    public Holiday(String name, GregorianCalendar date, boolean isHalfDay) {
+    /**
+     * Creates a new Holiday object.
+     *
+     * @param  name       DOCUMENT ME!
+     * @param  date       DOCUMENT ME!
+     * @param  isHalfDay  DOCUMENT ME!
+     */
+    public Holiday(final String name, GregorianCalendar date, final boolean isHalfDay) {
         this.name = name;
 
         if (date != null) {
-            this.date = (GregorianCalendar) date.clone();
+            this.date = (GregorianCalendar)date.clone();
         } else {
             date = null;
         }
@@ -35,42 +68,67 @@ public class Holiday implements Comparable<Holiday> {
         this.isHalfDay = isHalfDay;
     }
 
+    //~ Methods ----------------------------------------------------------------
 
-    public void setName(String name) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  name  DOCUMENT ME!
+     */
+    public void setName(final String name) {
         this.name = name;
     }
 
-
-    public void setDate(GregorianCalendar date) {
-        this.date = (GregorianCalendar) date.clone();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  date  DOCUMENT ME!
+     */
+    public void setDate(final GregorianCalendar date) {
+        this.date = (GregorianCalendar)date.clone();
     }
 
-
-    public void setIsHalfDay(boolean isHalfDay) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  isHalfDay  DOCUMENT ME!
+     */
+    public void setIsHalfDay(final boolean isHalfDay) {
         this.isHalfDay = isHalfDay;
     }
 
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public String getName() {
         return name;
     }
 
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public GregorianCalendar getDate() {
         return date;
     }
 
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean isHalfDay() {
         return isHalfDay;
     }
 
-
     @Override
-    public int compareTo(Holiday o) {
-        if (this.date.get(GregorianCalendar.YEAR) == o.getDate().get(GregorianCalendar.YEAR) &&
-                this.date.get(GregorianCalendar.MONTH) == o.getDate().get(GregorianCalendar.MONTH) &&
-                this.date.get(GregorianCalendar.DATE) == o.getDate().get(GregorianCalendar.DATE)) {
+    public int compareTo(final Holiday o) {
+        if ((this.date.get(GregorianCalendar.YEAR) == o.getDate().get(GregorianCalendar.YEAR))
+                    && (this.date.get(GregorianCalendar.MONTH) == o.getDate().get(GregorianCalendar.MONTH))
+                    && (this.date.get(GregorianCalendar.DATE) == o.getDate().get(GregorianCalendar.DATE))) {
             return 0;
         } else if (this.date.before(o.getDate())) {
             return -1;

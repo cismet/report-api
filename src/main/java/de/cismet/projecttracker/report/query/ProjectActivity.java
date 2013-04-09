@@ -1,43 +1,74 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.projecttracker.report.query;
 
-import de.cismet.projecttracker.report.db.entities.CostCategory;
-import de.cismet.projecttracker.report.db.entities.Project;
-import de.cismet.projecttracker.report.db.entities.WorkPackage;
+import org.apache.log4j.Logger;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-import org.apache.log4j.Logger;
 
+import de.cismet.projecttracker.report.db.entities.CostCategory;
+import de.cismet.projecttracker.report.db.entities.Project;
+import de.cismet.projecttracker.report.db.entities.WorkPackage;
 
 /**
- * This class represents a project activity
- * @author therter
+ * This class represents a project activity.
+ *
+ * @author   therter
+ * @version  $Revision$, $Date$
  */
 public class ProjectActivity {
+
+    //~ Static fields/initializers ---------------------------------------------
+
     private static Logger logger = Logger.getLogger(ProjectActivity.class);
+
+    //~ Instance fields --------------------------------------------------------
+
     private Project project;
     private Hashtable<CostCategory, Double> hoursOfWork = new Hashtable<CostCategory, Double>();
-    private Hashtable<CostCategory, Vector<WorkPackage>> workPackages = new Hashtable<CostCategory, Vector<WorkPackage>>();
+    private Hashtable<CostCategory, Vector<WorkPackage>> workPackages =
+        new Hashtable<CostCategory, Vector<WorkPackage>>();
     private Hashtable<WorkPackage, Double> workPackagesHours = new Hashtable<WorkPackage, Double>();
     private double hours;
 
+    //~ Constructors -----------------------------------------------------------
 
-    public ProjectActivity() {}
-
-    public ProjectActivity(Project project) {
-        this.project = project;
+    /**
+     * Creates a new ProjectActivity object.
+     */
+    public ProjectActivity() {
     }
 
     /**
-     * adds the given working hours to the activity
-     * @param workCategory the work category, the hours should be assigned to
-     * @param workpackage the workpackage, the hours were worked in. This can also be null
-     * @param hours the working hours
+     * Creates a new ProjectActivity object.
+     *
+     * @param  project  DOCUMENT ME!
      */
-    public void addHours(CostCategory costCategory, WorkPackage workpackage, double hours) {
+    public ProjectActivity(final Project project) {
+        this.project = project;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * adds the given working hours to the activity.
+     *
+     * @param  costCategory  the work category, the hours should be assigned to
+     * @param  workpackage   the workpackage, the hours were worked in. This can also be null
+     * @param  hours         the working hours
+     */
+    public void addHours(final CostCategory costCategory, final WorkPackage workpackage, final double hours) {
         if (logger.isDebugEnabled()) {
-            logger.debug("add to workCategory " + costCategory + " for work package " + workpackage + " " + hours + " h");
+            logger.debug("add to workCategory " + costCategory + " for work package " + workpackage + " " + hours
+                        + " h");
         }
 
         this.hours += hours;
@@ -60,7 +91,7 @@ public class ProjectActivity {
                 workPackageList = new Vector<WorkPackage>();
             }
 
-            if (workpackage != null && !workPackageList.contains(workpackage)) {
+            if ((workpackage != null) && !workPackageList.contains(workpackage)) {
                 workPackageList.add(workpackage);
             }
         }
@@ -73,71 +104,101 @@ public class ProjectActivity {
                 wpHours = new Double(0.0);
             }
 
-            wpHours = new Double( wpHours.doubleValue() + hours );
+            wpHours = new Double(wpHours.doubleValue() + hours);
 
             workPackagesHours.put(workpackage, wpHours);
         }
     }
 
     /**
-     * @return the project
+     * DOCUMENT ME!
+     *
+     * @return  the project
      */
     public Project getProject() {
         return project;
     }
 
     /**
-     * @param project the project to set
+     * DOCUMENT ME!
+     *
+     * @param  project  the project to set
      */
-    public void setProject(Project project) {
+    public void setProject(final Project project) {
         this.project = project;
     }
 
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public double getHoursOfWork() {
         return hours;
     }
 
-    public double getHoursOfWorkForCostCategory(CostCategory category) {
-        Double result = hoursOfWork.get(category);
-        return ( result == null ? 0.0 : result);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   category  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public double getHoursOfWorkForCostCategory(final CostCategory category) {
+        final Double result = hoursOfWork.get(category);
+        return ((result == null) ? 0.0 : result);
     }
 
-
-    public double getHoursOfWorkForWorkPackage(WorkPackage wp) {
-        Double result = workPackagesHours.get(wp);
-        return ( result == null ? 0.0 : result);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   wp  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public double getHoursOfWorkForWorkPackage(final WorkPackage wp) {
+        final Double result = workPackagesHours.get(wp);
+        return ((result == null) ? 0.0 : result);
     }
 
-
-    public List<WorkPackage> getWorkPackagesForCostCategory(CostCategory category) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   category  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<WorkPackage> getWorkPackagesForCostCategory(final CostCategory category) {
         return workPackages.get(category);
     }
 
-
     /**
-     * @return a list with all cost categories, the employee worked in.
+     * DOCUMENT ME!
+     *
+     * @return  a list with all cost categories, the employee worked in.
      */
     public List<CostCategory> getCostCategories() {
-        Enumeration<CostCategory> en = hoursOfWork.keys();
-        List<CostCategory> result = new Vector<CostCategory>();
+        final Enumeration<CostCategory> en = hoursOfWork.keys();
+        final List<CostCategory> result = new Vector<CostCategory>();
 
-        while ( en.hasMoreElements()) {
-            result.add( en.nextElement() );
+        while (en.hasMoreElements()) {
+            result.add(en.nextElement());
         }
 
         return result;
     }
 
     /**
-     * @return a list with all work packages, the employee worked in.
+     * DOCUMENT ME!
+     *
+     * @return  a list with all work packages, the employee worked in.
      */
     public List<WorkPackage> getWorkPackages() {
-        Enumeration<WorkPackage> en = workPackagesHours.keys();
-        List<WorkPackage> result = new Vector<WorkPackage>();
+        final Enumeration<WorkPackage> en = workPackagesHours.keys();
+        final List<WorkPackage> result = new Vector<WorkPackage>();
 
-        while ( en.hasMoreElements()) {
-            result.add( en.nextElement() );
+        while (en.hasMoreElements()) {
+            result.add(en.nextElement());
         }
 
         return result;

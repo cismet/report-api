@@ -1,19 +1,34 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.projecttracker.report.query;
 
+import java.util.*;
 
 import de.cismet.projecttracker.report.db.entities.Project;
 import de.cismet.projecttracker.report.helper.CalendarHelper;
-import java.util.*;
 
 /**
- * This class represents a single day of a staff and contains all activities, leave, illness time
- * and training, that a staff has done at the corresponding day.
- * @author therter
+ * This class represents a single day of a staff and contains all activities, leave, illness time and training, that a
+ * staff has done at the corresponding day.
+ *
+ * @author   therter
+ * @version  $Revision$, $Date$
  */
 public class StaffDay implements Comparable<StaffDay> {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String HOLIDAY = "Urlaub";
+    private static final String ILLNESS = "Krank";
+
+    //~ Instance fields --------------------------------------------------------
+
     private Hashtable<Project, ProjectActivity> projectActivities = new Hashtable<Project, ProjectActivity>();
-    private final static String HOLIDAY = "Urlaub";
-    private final static String ILLNESS = "Krank";
     private double specialLeave;
     private double annualLeave;
     private double illness;
@@ -22,175 +37,239 @@ public class StaffDay implements Comparable<StaffDay> {
     private GregorianCalendar start;
     private GregorianCalendar end;
 
-    
-    public StaffDay(Date day) {
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new StaffDay object.
+     *
+     * @param  day  DOCUMENT ME!
+     */
+    public StaffDay(final Date day) {
         this.day = new GregorianCalendar(day.getYear() + 1900, day.getMonth(), day.getDate());
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     /**
-     * @return the projectActivities
+     * DOCUMENT ME!
+     *
+     * @param   project  DOCUMENT ME!
+     *
+     * @return  the projectActivities
      */
-    public ProjectActivity getProjectActivity(Project project) {
+    public ProjectActivity getProjectActivity(final Project project) {
         return projectActivities.get(project);
     }
 
     /**
-     * @param projectActivities the projectActivities to set
+     * DOCUMENT ME!
+     *
+     * @param  project          DOCUMENT ME!
+     * @param  projectActivity  the projectActivities to set
      */
-    public void addProjectActivity(Project project, ProjectActivity projectActivity) {
+    public void addProjectActivity(final Project project, final ProjectActivity projectActivity) {
         this.projectActivities.put(project, projectActivity);
     }
 
     /**
-     * @return the specialLeave
+     * DOCUMENT ME!
+     *
+     * @return  the specialLeave
      */
     public double getSpecialLeave() {
         return specialLeave;
     }
 
     /**
-     * @param specialLeave the specialLeave to set
+     * DOCUMENT ME!
+     *
+     * @param  hours  specialLeave the specialLeave to set
      */
-    public void addSpecialLeave(double hours) {
+    public void addSpecialLeave(final double hours) {
         this.specialLeave = hours;
     }
 
     /**
-     * @return the annualLeave
+     * DOCUMENT ME!
+     *
+     * @return  the annualLeave
      */
     public double getAnnualLeave() {
         return annualLeave;
     }
 
     /**
-     * @param annualLeave the annualLeave to set
+     * DOCUMENT ME!
+     *
+     * @param  hours  annualLeave the annualLeave to set
      */
-    public void addAnnualLeave(double hours) {
+    public void addAnnualLeave(final double hours) {
         this.annualLeave += hours;
     }
 
     /**
-     * @return the illness
+     * DOCUMENT ME!
+     *
+     * @return  the illness
      */
     public double getIllness() {
         return illness;
     }
 
     /**
-     * @param illness the illness to set
+     * DOCUMENT ME!
+     *
+     * @param  hours  illness the illness to set
      */
-    public void addIllness(double hours) {
+    public void addIllness(final double hours) {
         this.illness += hours;
     }
 
     /**
-     * @return the training
+     * DOCUMENT ME!
+     *
+     * @return  the training
      */
     public double getTraining() {
         return training;
     }
 
     /**
-     * @param training the training to set
+     * DOCUMENT ME!
+     *
+     * @param  hours  training the training to set
      */
-    public void addTraining(double hours) {
+    public void addTraining(final double hours) {
         this.training += hours;
     }
 
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public List<ProjectActivity> getAllProjectActivities() {
-        Vector<ProjectActivity> result = new Vector<ProjectActivity>();
+        final Vector<ProjectActivity> result = new Vector<ProjectActivity>();
 
         result.addAll(projectActivities.values());
-        
+
         return result;
     }
 
     /**
-     * @return the start
+     * DOCUMENT ME!
+     *
+     * @return  the start
      */
     public GregorianCalendar getStart() {
         return start;
     }
 
     /**
-     * @return the start
+     * DOCUMENT ME!
+     *
+     * @return  the start
      */
     public String getStartAsString() {
-        return CalendarHelper.toDateString( start );
-    }    
-    
-    /**
-     * @param start the start to set
-     */
-    public void setStart(GregorianCalendar start) {
-        this.start = start;
-    }
-    
-    /**
-     * @param start the start to set
-     */
-    public void setStart(Date start) {
-        this.start = new GregorianCalendar(start.getYear() + 1900, start.getMonth(), start.getDate(), start.getHours(), start.getMinutes());
+        return CalendarHelper.toDateString(start);
     }
 
     /**
-     * @return the end
+     * DOCUMENT ME!
+     *
+     * @param  start  the start to set
+     */
+    public void setStart(final GregorianCalendar start) {
+        this.start = start;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  start  the start to set
+     */
+    public void setStart(final Date start) {
+        this.start = new GregorianCalendar(start.getYear() + 1900,
+                start.getMonth(),
+                start.getDate(),
+                start.getHours(),
+                start.getMinutes());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the end
      */
     public GregorianCalendar getEnd() {
         return end;
     }
 
     /**
-     * @param end the end to set
+     * DOCUMENT ME!
+     *
+     * @param  end  the end to set
      */
-    public void setEnd(GregorianCalendar end) {
+    public void setEnd(final GregorianCalendar end) {
         this.end = end;
     }
 
     /**
-     * @param end the end to set
+     * DOCUMENT ME!
+     *
+     * @param  end  the end to set
      */
-    public void setEnd(Date end) {
-        this.end = new GregorianCalendar(end.getYear() + 1900, end.getMonth(), end.getDate(), end.getHours(), end.getMinutes());
+    public void setEnd(final Date end) {
+        this.end = new GregorianCalendar(end.getYear() + 1900,
+                end.getMonth(),
+                end.getDate(),
+                end.getHours(),
+                end.getMinutes());
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public List<String> getErrors() {
-        //TODO: internationalisieren
-        List<String> errors = new ArrayList<String>();
+        // TODO: internationalisieren
+        final List<String> errors = new ArrayList<String>();
         double time = 0.0;
 
-        for (Project tmp : projectActivities.keySet()) {
-            ProjectActivity act = projectActivities.get(tmp);
+        for (final Project tmp : projectActivities.keySet()) {
+            final ProjectActivity act = projectActivities.get(tmp);
             time += act.getHoursOfWork();
             if (act.getProject().getName().equals(HOLIDAY) || act.getProject().getName().equals(ILLNESS)) {
                 return null;
             }
         }
-        
+
         if (start == null) {
             errors.add(CalendarHelper.toDateString(day) + ": Startzeit fehlt");
         }
-        
+
         if (end == null) {
             errors.add(CalendarHelper.toDateString(day) + ": Endzeit fehlt");
         }
-        
-        if (start != null && end != null) {
-            GregorianCalendar testTime = (GregorianCalendar)start.clone();
-            int amount = (int)(time * 60);
+
+        if ((start != null) && (end != null)) {
+            final GregorianCalendar testTime = (GregorianCalendar)start.clone();
+            final int amount = (int)(time * 60);
             testTime.add(GregorianCalendar.MINUTE, amount);
-            long diff = (end.getTimeInMillis() - start.getTimeInMillis()) / 60000;
+            final long diff = (end.getTimeInMillis() - start.getTimeInMillis()) / 60000;
             if (diff > 30) {
-                errors.add(CalendarHelper.toDateString(day) + ": Die Differenz zwischen der Start- und Endzeit und den gebuchten Stunden beträgt " + diff + " Minuten.");
+                errors.add(CalendarHelper.toDateString(day)
+                            + ": Die Differenz zwischen der Start- und Endzeit und den gebuchten Stunden beträgt "
+                            + diff + " Minuten.");
             }
         }
-        
+
         return errors;
     }
 
     @Override
-    public int compareTo(StaffDay o) {
+    public int compareTo(final StaffDay o) {
         return day.compareTo(o.day);
     }
 }

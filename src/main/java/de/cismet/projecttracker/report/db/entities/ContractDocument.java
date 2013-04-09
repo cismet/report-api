@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.projecttracker.report.db.entities;
 
 import javax.persistence.Basic;
@@ -9,23 +16,56 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 @Entity
-@Table(name = "contract_document", schema = "public")
+@Table(
+    name = "contract_document",
+    schema = "public"
+)
 public class ContractDocument extends BasicHibernateEntity {
+
+    //~ Instance fields --------------------------------------------------------
 
     private Contract contract;
     private String documentname;
     private String mimetype;
     private byte[] document;
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new ContractDocument object.
+     */
     public ContractDocument() {
     }
 
-    public ContractDocument(long id) {
+    /**
+     * Creates a new ContractDocument object.
+     *
+     * @param  id  DOCUMENT ME!
+     */
+    public ContractDocument(final long id) {
         this.id = id;
     }
 
-    public ContractDocument(long id, Contract contract, byte[] document, String documentname, String mimetype) {
+    /**
+     * Creates a new ContractDocument object.
+     *
+     * @param  id            DOCUMENT ME!
+     * @param  contract      DOCUMENT ME!
+     * @param  document      DOCUMENT ME!
+     * @param  documentname  DOCUMENT ME!
+     * @param  mimetype      DOCUMENT ME!
+     */
+    public ContractDocument(final long id,
+            final Contract contract,
+            final byte[] document,
+            final String documentname,
+            final String mimetype) {
         this.id = id;
         this.contract = contract;
         this.document = document;
@@ -33,44 +73,87 @@ public class ContractDocument extends BasicHibernateEntity {
         this.mimetype = mimetype;
     }
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contractid")
     public Contract getContract() {
         return this.contract;
     }
 
-    public void setContract(Contract contract) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  contract  DOCUMENT ME!
+     */
+    public void setContract(final Contract contract) {
         this.contract = contract;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Basic(fetch = FetchType.LAZY)
     @Lob
-    @Column(name = "document", nullable = false)
+    @Column(
+        name = "document",
+        nullable = false
+    )
     public byte[] getDocument() {
         return this.document;
     }
 
-    public void setDocument(byte[] document) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  document  DOCUMENT ME!
+     */
+    public void setDocument(final byte[] document) {
         this.document = document;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Column(name = "documentname")
     public String getDocumentname() {
         return this.documentname;
     }
 
-    public void setDocumentname(String documentname) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  documentname  DOCUMENT ME!
+     */
+    public void setDocumentname(final String documentname) {
         this.documentname = documentname;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Column(name = "mimetype")
     public String getMimetype() {
         return this.mimetype;
     }
 
-    public void setMimetype(String mimetype) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  mimetype  DOCUMENT ME!
+     */
+    public void setMimetype(final String mimetype) {
         this.mimetype = mimetype;
     }
 }
-
-

@@ -1,13 +1,31 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.projecttracker.report.db.entities;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.*;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 @Entity
-@Table(name = "staff", schema = "public")
+@Table(
+    name = "staff",
+    schema = "public"
+)
 public class Staff extends BasicHibernateEntity {
+
+    //~ Instance fields --------------------------------------------------------
 
     private String firstname;
     private String name;
@@ -20,10 +38,34 @@ public class Staff extends BasicHibernateEntity {
     private Date lastmodification;
     private Profile profile;
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new Staff object.
+     */
     public Staff() {
     }
 
-    public Staff(long id, String firstname, String name, int permissions, String username, String email, byte[] password, Date lastmodification) {
+    /**
+     * Creates a new Staff object.
+     *
+     * @param  id                DOCUMENT ME!
+     * @param  firstname         DOCUMENT ME!
+     * @param  name              DOCUMENT ME!
+     * @param  permissions       DOCUMENT ME!
+     * @param  username          DOCUMENT ME!
+     * @param  email             DOCUMENT ME!
+     * @param  password          DOCUMENT ME!
+     * @param  lastmodification  DOCUMENT ME!
+     */
+    public Staff(final long id,
+            final String firstname,
+            final String name,
+            final int permissions,
+            final String username,
+            final String email,
+            final byte[] password,
+            final Date lastmodification) {
         this.id = id;
         this.firstname = firstname;
         this.name = name;
@@ -34,7 +76,30 @@ public class Staff extends BasicHibernateEntity {
         this.lastmodification = lastmodification;
     }
 
-    public Staff(long id, String firstname, String name, int permissions, String username, String email, byte[] password, Date lastmodification, Set<Contract> contracts, Set<Activity> activities) {
+    /**
+     * Creates a new Staff object.
+     *
+     * @param  id                DOCUMENT ME!
+     * @param  firstname         DOCUMENT ME!
+     * @param  name              DOCUMENT ME!
+     * @param  permissions       DOCUMENT ME!
+     * @param  username          DOCUMENT ME!
+     * @param  email             DOCUMENT ME!
+     * @param  password          DOCUMENT ME!
+     * @param  lastmodification  DOCUMENT ME!
+     * @param  contracts         DOCUMENT ME!
+     * @param  activities        DOCUMENT ME!
+     */
+    public Staff(final long id,
+            final String firstname,
+            final String name,
+            final int permissions,
+            final String username,
+            final String email,
+            final byte[] password,
+            final Date lastmodification,
+            final Set<Contract> contracts,
+            final Set<Activity> activities) {
         this.id = id;
         this.firstname = firstname;
         this.name = name;
@@ -47,95 +112,234 @@ public class Staff extends BasicHibernateEntity {
         this.lastmodification = lastmodification;
     }
 
-    @Column(name = "firstname", nullable = false, length = 50)
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "firstname",
+        nullable = false,
+        length = 50
+    )
     public String getFirstname() {
         return this.firstname;
     }
 
-    public void setFirstname(String firstname) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  firstname  DOCUMENT ME!
+     */
+    public void setFirstname(final String firstname) {
         this.firstname = firstname;
     }
 
-    @Column(name = "name", nullable = false, length = 50)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "name",
+        nullable = false,
+        length = 50
+    )
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  name  DOCUMENT ME!
+     */
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Column(name = "permissions", nullable = false)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "permissions",
+        nullable = false
+    )
     public int getPermissions() {
         return this.permissions;
     }
 
-    public void setPermissions(int permissions) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  permissions  DOCUMENT ME!
+     */
+    public void setPermissions(final int permissions) {
         this.permissions = permissions;
     }
 
-    @Column(name = "username", nullable = false, length = 50)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "username",
+        nullable = false,
+        length = 50
+    )
     public String getUsername() {
         return this.username;
     }
 
-    public void setUsername(String username) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  username  DOCUMENT ME!
+     */
+    public void setUsername(final String username) {
         this.username = username;
     }
 
-    @Column(name = "email", nullable = true, length = 100)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "email",
+        nullable = true,
+        length = 100
+    )
     public String getEmail() {
         return this.email;
     }
 
-    public void setEmail(String email) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  email  DOCUMENT ME!
+     */
+    public void setEmail(final String email) {
         this.email = email;
     }
 
-    @Column(name = "password", nullable = true)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "password",
+        nullable = true
+    )
     public byte[] getPassword() {
         return this.password;
     }
 
-    public void setPassword(byte[] password) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  password  DOCUMENT ME!
+     */
+    public void setPassword(final byte[] password) {
         this.password = password;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "lastmodification", nullable = true, length = 29)
+    @Column(
+        name = "lastmodification",
+        nullable = true,
+        length = 29
+    )
     public Date getLastmodification() {
         return lastmodification;
     }
 
-    public void setLastmodification(Date lastmodification) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  lastmodification  DOCUMENT ME!
+     */
+    public void setLastmodification(final Date lastmodification) {
         this.lastmodification = lastmodification;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "staff")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER,
+        mappedBy = "staff"
+    )
     public Set<Contract> getContracts() {
         return this.contracts;
     }
 
-    public void setContracts(Set<Contract> contracts) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  contracts  DOCUMENT ME!
+     */
+    public void setContracts(final Set<Contract> contracts) {
         this.contracts = contracts;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "staff")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.LAZY,
+        mappedBy = "staff"
+    )
     public Set<Activity> getActivities() {
         return this.activities;
     }
 
-    public void setActivities(Set<Activity> activities) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  activities  DOCUMENT ME!
+     */
+    public void setActivities(final Set<Activity> activities) {
         this.activities = activities;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "profileid", nullable = true)
+    @JoinColumn(
+        name = "profileid",
+        nullable = true
+    )
     public Profile getProfile() {
         return profile;
     }
 
-    public void setProfile(Profile profile) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  profile  DOCUMENT ME!
+     */
+    public void setProfile(final Profile profile) {
         this.profile = profile;
     }
 }

@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -7,71 +14,154 @@ package de.cismet.projecttracker.report.db.entities;
 import javax.persistence.*;
 
 /**
+ * DOCUMENT ME!
  *
- * @author dmeiers
+ * @author   dmeiers
+ * @version  $Revision$, $Date$
  */
 @Entity
-@Table(name = "profile", schema = "public")
+@Table(
+    name = "profile",
+    schema = "public"
+)
 public class Profile extends BasicHibernateEntity {
+
+    //~ Instance fields --------------------------------------------------------
 
     private boolean autoPauseEnabled;
     private boolean weekLockModeEnabled;
     private boolean dayLockModeEnabled;
     private double autoPauseDuration;
     private double residualVacation;
-    
-    public Profile(){
-        
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new Profile object.
+     */
+    public Profile() {
     }
 
-    public Profile( boolean autoPauseEnabled, boolean weekLockMode) {
+    /**
+     * Creates a new Profile object.
+     *
+     * @param  autoPauseEnabled  DOCUMENT ME!
+     * @param  weekLockMode      DOCUMENT ME!
+     */
+    public Profile(final boolean autoPauseEnabled, final boolean weekLockMode) {
         this.autoPauseEnabled = autoPauseEnabled;
         this.weekLockModeEnabled = weekLockMode;
     }
 
-    @Column(name = "auto_pause", nullable = false)
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "auto_pause",
+        nullable = false
+    )
     public boolean getAutoPauseEnabled() {
         return autoPauseEnabled;
     }
 
-    public void setAutoPauseEnabled(boolean autoPauseEnabled) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  autoPauseEnabled  DOCUMENT ME!
+     */
+    public void setAutoPauseEnabled(final boolean autoPauseEnabled) {
         this.autoPauseEnabled = autoPauseEnabled;
     }
 
-    @Column(name = "week_lock", nullable = false)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "week_lock",
+        nullable = false
+    )
     public boolean getWeekLockModeEnabled() {
         return weekLockModeEnabled;
     }
 
-    public void setWeekLockModeEnabled(boolean weekLockMode) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  weekLockMode  DOCUMENT ME!
+     */
+    public void setWeekLockModeEnabled(final boolean weekLockMode) {
         this.weekLockModeEnabled = weekLockMode;
     }
 
-     @Column(name = "day_lock", nullable = false)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "day_lock",
+        nullable = false
+    )
     public boolean getDayLockModeEnabled() {
         return dayLockModeEnabled;
     }
 
-    public void setDayLockModeEnabled(boolean dayLockModeEnabled) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  dayLockModeEnabled  DOCUMENT ME!
+     */
+    public void setDayLockModeEnabled(final boolean dayLockModeEnabled) {
         this.dayLockModeEnabled = dayLockModeEnabled;
     }
 
-     @Column(name = "auto_pause_time", nullable = false)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "auto_pause_time",
+        nullable = false
+    )
     public double getAutoPauseDuration() {
         return autoPauseDuration;
     }
 
-    public void setAutoPauseDuration(double autoPauseDuration) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  autoPauseDuration  DOCUMENT ME!
+     */
+    public void setAutoPauseDuration(final double autoPauseDuration) {
         this.autoPauseDuration = autoPauseDuration;
     }
 
-     @Column(name = "residual_vacation", nullable = false)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "residual_vacation",
+        nullable = false
+    )
     public double getResidualVacation() {
         return residualVacation;
     }
 
-    public void setResidualVacation(double residualVacation) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  residualVacation  DOCUMENT ME!
+     */
+    public void setResidualVacation(final double residualVacation) {
         this.residualVacation = residualVacation;
     }
-
 }
