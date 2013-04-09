@@ -54,20 +54,18 @@ public class ReportManager {
     private final String REPORT_PATH = "WEB-INF/reports";
     private final String REPORT_PACKAGE = "de.cismet.projecttracker.report";
     private String applicationPath;
+    private String confDir;
     private ProjectTrackerReport[] reports;
     private URLClassLoader urlc;
     private ResourceBundle config;
 
-    //~ Constructors -----------------------------------------------------------
 
-    /**
-     * Creates a new instance of PluginCore.
-     *
-     * @param  applicationPath  DOCUMENT ME!
-     */
-    public ReportManager(final String applicationPath) {
+    /** Creates a new instance of PluginCore */
+    public ReportManager(String applicationPath, String applicationConfDir) {
         this.applicationPath = applicationPath;
+        confDir = applicationConfDir;
         initAvailableReports();
+//        ServletContext context = getServletContext();
         this.config = ResourceBundle.getBundle("de.cismet.projecttracker.report.commons.ReportAPIConfig");
     }
 
@@ -110,13 +108,13 @@ public class ReportManager {
             if (createdReport != null) {
                 // todo das Speichern des Reports in die Report API auslagern
                 // write the new report to the db
-                final DBManager manager = new DBManager();
-                final Report reportEntry = new Report();
-                reportEntry.setCreationtime(new Date());
-                reportEntry.setFromdate(start.getTime());
-                reportEntry.setTodate(end.getTime());
-                reportEntry.setName(name);
-                reportEntry.setGeneratorname(report.getReportName());
+                DBManager manager = new DBManager(confDir);
+                Report reportEntry = new Report();
+                reportEntry.setCreationtime( new Date() );
+                reportEntry.setFromdate( start.getTime() );
+                reportEntry.setTodate( end.getTime() );
+                reportEntry.setName( name );
+                reportEntry.setGeneratorname( report.getReportName() );
                 reportEntry.setReportdocument(createdReport);
                 if (staffID != 0) {
                     final Staff staff = (Staff)manager.getObject(Staff.class, staffID);

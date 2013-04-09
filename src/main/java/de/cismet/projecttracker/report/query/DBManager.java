@@ -1,12 +1,16 @@
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+/**
+ * *************************************************
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ * 
+* ... and it just works.
+ * 
+***************************************************
+ */
 package de.cismet.projecttracker.report.query;
 
+import java.io.FileReader;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import org.hibernate.HibernateException;
@@ -22,7 +26,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.persistence.Table;
 
@@ -31,34 +34,25 @@ import de.cismet.projecttracker.report.exceptions.DataRetrievalException;
 /**
  * This class provides some simple methods to access the database.
  *
- * @author   therter
- * @version  $Revision$, $Date$
+ * @author therter
+ * @version $Revision$, $Date$
  */
 public class DBManager {
 
     //~ Static fields/initializers ---------------------------------------------
-
     private static Logger logger = Logger.getLogger(DBManager.class);
-
-    //~ Instance fields --------------------------------------------------------
-
     protected Session hibernateSession;
+    private final String CONF_BASE_DIR;
 
-    //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new DBManager object.
-     */
-    public DBManager() {
-        hibernateSession = HibernateUtil.getSession();
+    public DBManager(String confBaseDir) {
+        CONF_BASE_DIR = confBaseDir;
+        hibernateSession = HibernateUtil.getSession(confBaseDir);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * checks if the db manager has an open database session.
      *
-     * @return  DOCUMENT ME!
+     * @return DOCUMENT ME!
      */
     public boolean isSessionOpen() {
         if (hibernateSession != null) {
@@ -71,15 +65,16 @@ public class DBManager {
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @return DOCUMENT ME!
      */
     public Connection getDatabaseConnection() {
         try {
-            final ResourceBundle bundle = ResourceBundle.getBundle("de.cismet.projecttracker.report.query.database");
-            Class.forName(bundle.getString("driver"));
-            return DriverManager.getConnection(bundle.getString("path"),
-                    bundle.getString("user"),
-                    bundle.getString("password"));
+            Properties dbConnProp = new Properties();
+            final FileReader fr = new FileReader(CONF_BASE_DIR + System.getProperty("file.separator") + "database.properties");
+            dbConnProp.load(fr);
+
+            Class.forName(dbConnProp.getProperty("driver"));
+            return DriverManager.getConnection(dbConnProp.getProperty("path"), dbConnProp.getProperty("user"), dbConnProp.getProperty("password"));
         } catch (Exception e) {
             logger.error("Cannot open database connection.", e);
         }
@@ -90,12 +85,12 @@ public class DBManager {
     /**
      * DOCUMENT ME!
      *
-     * @param   cl  the class of the object that should be returned
-     * @param   id  the id of the object that should be returned
+     * @param cl the class of the object that should be returned
+     * @param id the id of the object that should be returned
      *
-     * @return  the database object of the given class with the given id
+     * @return the database object of the given class with the given id
      *
-     * @throws  DataRetrievalException  DOCUMENT ME!
+     * @throws DataRetrievalException DOCUMENT ME!
      */
     public Object getObject(final Class cl, final long id) throws DataRetrievalException {
         if (logger.isDebugEnabled()) {
@@ -114,11 +109,11 @@ public class DBManager {
     /**
      * DOCUMENT ME!
      *
-     * @param   hqlQuery  the hql query that should be executed on the database
+     * @param hqlQuery the hql query that should be executed on the database
      *
-     * @return  the results of the given query
+     * @return the results of the given query
      *
-     * @throws  DataRetrievalException  DOCUMENT ME!
+     * @throws DataRetrievalException DOCUMENT ME!
      */
     public Object getObject(final String hqlQuery) throws DataRetrievalException {
         if (logger.isDebugEnabled()) {
@@ -139,11 +134,11 @@ public class DBManager {
     /**
      * DOCUMENT ME!
      *
-     * @param   cl  the class of the object that should be returned
+     * @param cl the class of the object that should be returned
      *
-     * @return  the database object of the given class with the given id
+     * @return the database object of the given class with the given id
      *
-     * @throws  DataRetrievalException  DOCUMENT ME!
+     * @throws DataRetrievalException DOCUMENT ME!
      */
     public List getAllObjects(final Class cl) throws DataRetrievalException {
         if (logger.isDebugEnabled()) {
@@ -163,15 +158,15 @@ public class DBManager {
     /**
      * reads a object from the database.
      *
-     * @param   cl         the class of the object that should be read
-     * @param   attribute  the attribute, that should be select the object to read. This attribute should be unique
-     *                     within the database.
-     * @param   value      the object of the given class that has this value in the given attribute will be returned. If
-     *                     this value matches more than one object, an exception will be thrown.
+     * @param cl the class of the object that should be read
+     * @param attribute the attribute, that should be select the object to read. This attribute should be unique within
+     * the database.
+     * @param value the object of the given class that has this value in the given attribute will be returned. If this
+     * value matches more than one object, an exception will be thrown.
      *
-     * @return  the database object object
+     * @return the database object object
      *
-     * @throws  DataRetrievalException  DOCUMENT ME!
+     * @throws DataRetrievalException DOCUMENT ME!
      */
     public Object getObjectByAttribute(final Class cl, final String attribute, final Object value)
             throws DataRetrievalException {
@@ -181,9 +176,9 @@ public class DBManager {
 
         try {
             final Object result = hibernateSession.createCriteria(cl)
-                        .add(Restrictions.eq(attribute, value))
-                        .setMaxResults(1)
-                        .uniqueResult();
+                    .add(Restrictions.eq(attribute, value))
+                    .setMaxResults(1)
+                    .uniqueResult();
 
             return result;
         } catch (Throwable t) {
@@ -195,15 +190,15 @@ public class DBManager {
     /**
      * reads all objects from the database, which fulfils the given restrictions.
      *
-     * @param   cl         the class of the object that should be read
-     * @param   attribute  the attribute, that should be select the object to read. This attribute should be unique
-     *                     within the database.
-     * @param   value      the object of the given class that has this value in the given attribute will be returned. If
-     *                     this value matches more than one object, an exception will be thrown.
+     * @param cl the class of the object that should be read
+     * @param attribute the attribute, that should be select the object to read. This attribute should be unique within
+     * the database.
+     * @param value the object of the given class that has this value in the given attribute will be returned. If this
+     * value matches more than one object, an exception will be thrown.
      *
-     * @return  a list with all objects, which fulfils the given restrictions
+     * @return a list with all objects, which fulfils the given restrictions
      *
-     * @throws  DataRetrievalException  DOCUMENT ME!
+     * @throws DataRetrievalException DOCUMENT ME!
      */
     public List getObjectsByAttribute(final Class cl, final String attribute, final Object value)
             throws DataRetrievalException {
@@ -224,11 +219,11 @@ public class DBManager {
     /**
      * reads any object of given class from the database.
      *
-     * @param   cl  the class of the object that should be read
+     * @param cl the class of the object that should be read
      *
-     * @return  the database object
+     * @return the database object
      *
-     * @throws  DataRetrievalException  DOCUMENT ME!
+     * @throws DataRetrievalException DOCUMENT ME!
      */
     public Object getAnyObjectByClass(final Class cl) throws DataRetrievalException {
         if (logger.isDebugEnabled()) {
@@ -248,11 +243,11 @@ public class DBManager {
     /**
      * DOCUMENT ME!
      *
-     * @param   hqlQuery  the hql query that should be executed on the database
+     * @param hqlQuery the hql query that should be executed on the database
      *
-     * @return  a list, that contains the results of the given query
+     * @return a list, that contains the results of the given query
      *
-     * @throws  DataRetrievalException  DOCUMENT ME!
+     * @throws DataRetrievalException DOCUMENT ME!
      */
     public List getObjectsByAttribute(final String hqlQuery) throws DataRetrievalException {
         if (logger.isDebugEnabled()) {
@@ -273,11 +268,11 @@ public class DBManager {
     /**
      * Writes the given object to the database. The object should not contained in the database before.
      *
-     * @param   object  the object that should be written to the database
+     * @param object the object that should be written to the database
      *
-     * @return  the id of the given object within the database
+     * @return the id of the given object within the database
      *
-     * @throws  HibernateException  DOCUMENT ME!
+     * @throws HibernateException DOCUMENT ME!
      */
     public Serializable createObject(final Object object) throws HibernateException {
         Serializable res = null;
@@ -300,9 +295,9 @@ public class DBManager {
     /**
      * Writes the given object to the database. The object should already exists within the db.
      *
-     * @param   object  the object that should be written to the database
+     * @param object the object that should be written to the database
      *
-     * @throws  HibernateException  DOCUMENT ME!
+     * @throws HibernateException DOCUMENT ME!
      */
     public void saveObject(final Object object) throws HibernateException {
         Transaction ta = null;
@@ -322,9 +317,9 @@ public class DBManager {
     /**
      * Deletes the given object from the db.
      *
-     * @param   object  the object that should be deleted from the database
+     * @param object the object that should be deleted from the database
      *
-     * @throws  HibernateException  DOCUMENT ME!
+     * @throws HibernateException DOCUMENT ME!
      */
     public void deleteObject(final Object object) throws HibernateException {
         Transaction ta = null;
@@ -369,7 +364,7 @@ public class DBManager {
     /**
      * DOCUMENT ME!
      *
-     * @return  a hibernate session
+     * @return a hibernate session
      */
     public Session getSession() {
         return hibernateSession;

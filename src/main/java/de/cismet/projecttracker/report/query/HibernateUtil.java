@@ -11,6 +11,7 @@
  */
 package de.cismet.projecttracker.report.query;
 
+import java.io.File;
 import org.apache.log4j.Logger;
 
 import org.hibernate.Session;
@@ -28,22 +29,14 @@ public class HibernateUtil {
     //~ Static fields/initializers ---------------------------------------------
 
     private static Logger logger = Logger.getLogger(HibernateUtil.class);
-    private static SessionFactory sessionFactory = getSessionfactory();
+    private static SessionFactory sessionFactory;
 
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static SessionFactory getSessionfactory() {
+    private static SessionFactory getSessionfactory(String confBaseDir) {
         try {
-            if (logger.isDebugEnabled()) {
-                // Create the SessionFactory from hibernate.cfg.xml
-                logger.debug("create hibernate session factory");
-            }
-            return new AnnotationConfiguration().configure("ReportHibernate.cfg.xml").buildSessionFactory();
+            // Create the SessionFactory from hibernate.cfg.xml
+            logger.debug("create hibernate session factory");
+            final File hibernateConfFile = new File(confBaseDir+System.getProperty("file.seperator")+"ReportHibernate.cfg.xml");
+            return new AnnotationConfiguration().configure(hibernateConfFile).buildSessionFactory();
         } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
             logger.error("Initial SessionFactory creation failed." + ex);
@@ -53,21 +46,17 @@ public class HibernateUtil {
         return null;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static Session getSession() {
+    public static Session getSession(String confBaseDir) {
+        if(sessionFactory== null){
+            sessionFactory = getSessionFactory(confBaseDir);
+        }
         return sessionFactory.openSession();
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static SessionFactory getSessionFactory() {
+    public static SessionFactory getSessionFactory(String confBaseDir) {
+        if(sessionFactory == null){
+            sessionFactory = getSessionFactory(confBaseDir);
+        }
         return sessionFactory;
     }
 }
