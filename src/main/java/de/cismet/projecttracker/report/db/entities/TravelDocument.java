@@ -79,13 +79,6 @@ public class TravelDocument extends BasicHibernateEntity {
         return this.travel;
     }
 
-<<<<<<< HEAD
-    public void setTravel(Travel travel) {
-        this.travel = travel;
-    }
-
-    @Column(name="documentname", nullable=false, length=50)
-=======
     /**
      * DOCUMENT ME!
      *
@@ -105,18 +98,10 @@ public class TravelDocument extends BasicHibernateEntity {
         nullable = false,
         length = 50
     )
->>>>>>> 57548bb7f3dbae91d1afebfec33bd4b494d16e66
     public String getDocumentname() {
         return this.documentname;
     }
 
-<<<<<<< HEAD
-    public void setDocumentname(String documentname) {
-        this.documentname = documentname;
-    }
-
-    @Column(name="mimetype", nullable=false, length=100)
-=======
     /**
      * DOCUMENT ME!
      *
@@ -136,18 +121,10 @@ public class TravelDocument extends BasicHibernateEntity {
         nullable = false,
         length = 100
     )
->>>>>>> 57548bb7f3dbae91d1afebfec33bd4b494d16e66
     public String getMimetype() {
         return this.mimetype;
     }
 
-<<<<<<< HEAD
-    public void setMimetype(String mimetype) {
-        this.mimetype = mimetype;
-    }
-
-    @Column(name="document", nullable=false)
-=======
     /**
      * DOCUMENT ME!
      *
@@ -166,19 +143,10 @@ public class TravelDocument extends BasicHibernateEntity {
         name = "document",
         nullable = false
     )
->>>>>>> 57548bb7f3dbae91d1afebfec33bd4b494d16e66
     public byte[] getDocument() {
         return this.document;
     }
 
-<<<<<<< HEAD
-    public void setDocument(byte[] document) {
-        this.document = document;
-    }
-}
-
-
-=======
     /**
      * DOCUMENT ME!
      *
@@ -188,4 +156,3 @@ public class TravelDocument extends BasicHibernateEntity {
         this.document = document;
     }
 }
->>>>>>> 57548bb7f3dbae91d1afebfec33bd4b494d16e66

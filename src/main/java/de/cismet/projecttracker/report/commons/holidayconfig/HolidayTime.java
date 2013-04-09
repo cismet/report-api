@@ -9,10 +9,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-<<<<<<< HEAD
-
-=======
->>>>>>> 57548bb7f3dbae91d1afebfec33bd4b494d16e66
 package de.cismet.projecttracker.report.commons.holidayconfig;
 
 import java.util.GregorianCalendar;

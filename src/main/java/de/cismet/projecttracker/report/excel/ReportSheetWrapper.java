@@ -9,11 +9,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.cismet.projecttracker.report.excel;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -106,7 +103,6 @@ public class ReportSheetWrapper implements Iterable<Row> {
                 addedRows.put(key, value + 1);
             }
         }
-
 
         addedRows.put(newRowNum, internalRowNum);
 

@@ -233,7 +233,6 @@ public class HolidayEvaluator {
                     }
                 }
             }
-
         }
 
         return holidays;

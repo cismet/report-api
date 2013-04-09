@@ -19,7 +19,7 @@ package de.cismet.projecttracker.report.commons;
  */
 public interface KeyConstants {
 
-    //~ Static fields/initializers ---------------------------------------------
+    //~ Instance fields --------------------------------------------------------
 
     String ANNUAL_LEAVE_KEY = "annualLeave";
     String SPECIAL_LEAVE_KEY = "specialLeave";

@@ -63,7 +63,6 @@ public abstract class BasicHibernateEntity {
         return false;
     }
 
-    
     @Override
     public int hashCode() {
         return (int)(id % Integer.MAX_VALUE);
