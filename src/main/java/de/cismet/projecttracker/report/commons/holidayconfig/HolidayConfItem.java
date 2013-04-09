@@ -1,58 +1,83 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.cismet.projecttracker.report.commons.holidayconfig;
 
 /**
+ * DOCUMENT ME!
  *
- * @author therter
+ * @author   therter
+ * @version  $Revision$, $Date$
  */
 public class HolidayConfItem {
+
+    //~ Instance fields --------------------------------------------------------
+
     private String name;
     private boolean halfHoliday;
     private HolidayTime time;
 
+    //~ Methods ----------------------------------------------------------------
+
     /**
-     * @return the name
+     * DOCUMENT ME!
+     *
+     * @return  the name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @param name the name to set
+     * DOCUMENT ME!
+     *
+     * @param  name  the name to set
      */
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
     /**
-     * @return the halfHoliday
+     * DOCUMENT ME!
+     *
+     * @return  the halfHoliday
      */
     public boolean isHalfHoliday() {
         return halfHoliday;
     }
 
     /**
-     * @param halfHoliday the halfHoliday to set
+     * DOCUMENT ME!
+     *
+     * @param  halfHoliday  the halfHoliday to set
      */
-    public void setHalfHoliday(boolean halfHoliday) {
+    public void setHalfHoliday(final boolean halfHoliday) {
         this.halfHoliday = halfHoliday;
     }
 
     /**
-     * @return the time
+     * DOCUMENT ME!
+     *
+     * @return  the time
      */
     public HolidayTime getTime() {
         return time;
     }
 
     /**
-     * @param time the time to set
+     * DOCUMENT ME!
+     *
+     * @param  time  the time to set
      */
-    public void setTime(HolidayTime time) {
+    public void setTime(final HolidayTime time) {
         this.time = time;
     }
 
@@ -61,7 +86,12 @@ public class HolidayConfItem {
         return name + " " + halfHoliday + " " + time;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean isValid() {
-        return name != null && time != null && time.isValid();
+        return (name != null) && (time != null) && time.isValid();
     }
 }

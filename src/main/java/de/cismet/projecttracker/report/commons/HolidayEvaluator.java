@@ -1,36 +1,68 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.projecttracker.report.commons;
 
 import bsh.This;
-import de.cismet.projecttracker.report.commons.holidayconfig.HolidayConfItem;
-import de.cismet.projecttracker.report.commons.holidayconfig.HolidayConfiguration;
-import java.io.InputStream;
-import java.util.GregorianCalendar;
-import java.util.Vector;
-import java.util.Collections;
-import java.util.List;
+
 import org.apache.log4j.Logger;
 
+import java.io.InputStream;
+
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Vector;
+
+import de.cismet.projecttracker.report.commons.holidayconfig.HolidayConfItem;
+import de.cismet.projecttracker.report.commons.holidayconfig.HolidayConfiguration;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class HolidayEvaluator {
+
+    //~ Static fields/initializers ---------------------------------------------
 
     private static Logger logger = Logger.getLogger("de.cismet.projecttracker.report.commons.Holidays");
     private static final String CONFIG_FILE = "/de/cismet/projecttracker/report/commons/holidayConfig.xml";
+    public static final int HOLIDAY = 0;
+    public static final int HALF_HOLIDAY = 1;
+    public static final int WORKDAY = -1;
+
+    //~ Instance fields --------------------------------------------------------
+
     private Vector<Holiday> holidays;
     private int year;
-    public final static int HOLIDAY = 0;
-    public final static int HALF_HOLIDAY = 1;
-    public final static int WORKDAY = -1;
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new HolidayEvaluator object.
+     */
     public HolidayEvaluator() {
         this.year = 0;
         holidays = null;
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     /**
      * liefert -1, wenn der uebergebene Tag kein Feiertag ist, 0 wenn der uebergebene Tag ein Feiertag ist 1 wenn der
      * uebergebene Tag ein halber Feiertag ist.
+     *
+     * @param   day  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public int isHoliday(GregorianCalendar day) {
-        Holiday hol = getHolidayForDay(day);
+    public int isHoliday(final GregorianCalendar day) {
+        final Holiday hol = getHolidayForDay(day);
 
         if (hol != null) {
             if (hol.isHalfDay()) {
@@ -43,8 +75,15 @@ public class HolidayEvaluator {
         }
     }
 
-    public String getNameOfHoliday(GregorianCalendar day) {
-        Holiday hol = getHolidayForDay(day);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   day  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getNameOfHoliday(final GregorianCalendar day) {
+        final Holiday hol = getHolidayForDay(day);
 
         if (hol != null) {
             return hol.getName();
@@ -53,15 +92,22 @@ public class HolidayEvaluator {
         }
     }
 
-    private Holiday getHolidayForDay(GregorianCalendar day) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   day  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Holiday getHolidayForDay(final GregorianCalendar day) {
         if (day.get(GregorianCalendar.YEAR) != this.year) {
             calculateHolidays(day.get(GregorianCalendar.YEAR));
         }
 
-        int index = Collections.binarySearch(this.holidays, new Holiday(day));
+        final int index = Collections.binarySearch(this.holidays, new Holiday(day));
 
         if (index >= 0) {
-            Holiday hol = (Holiday) holidays.elementAt(index);
+            final Holiday hol = (Holiday)holidays.elementAt(index);
             return hol;
         } else {
             return null;
@@ -71,18 +117,20 @@ public class HolidayEvaluator {
     /**
      * berechnet alle beweglichen Feiertage des Saarlandes und speichert diese im Vector holidays. year bezeichnet das
      * Jahr, fuer die die Feiertageberechnet werden sollen.
+     *
+     * @param  year  DOCUMENT ME!
      */
-    private void calculateHolidays(int year) {
+    private void calculateHolidays(final int year) {
         Holiday currentHoliday;
-        GregorianCalendar easter = getEaster(year);
+        final GregorianCalendar easter = getEaster(year);
         GregorianCalendar tmp;
         this.year = year;
         holidays = new Vector<Holiday>();
 
-        HolidayConfiguration config = getConfiguration();
-        List<HolidayConfItem> holidayList = config.getHolidayList();
+        final HolidayConfiguration config = getConfiguration();
+        final List<HolidayConfItem> holidayList = config.getHolidayList();
 
-        for (HolidayConfItem singleHoliday : holidayList) {
+        for (final HolidayConfItem singleHoliday : holidayList) {
             currentHoliday = new Holiday(singleHoliday.getName());
             tmp = new GregorianCalendar();
 
@@ -93,16 +141,16 @@ public class HolidayEvaluator {
             if (singleHoliday.getTime().getFixDate() != null) {
                 tmp.setTimeInMillis(singleHoliday.getTime().getFixDate().getTimeInMillis());
 
-                if (singleHoliday.getTime().isEveryYear()) {	//Feiertag ist jedes Jahr
+                if (singleHoliday.getTime().isEveryYear()) { // Feiertag ist jedes Jahr
                     tmp.set(GregorianCalendar.YEAR, year);
                 } else {
                     if (tmp.get(GregorianCalendar.YEAR) != year) {
-                        tmp = null;						//Feiertag liegt nicht im geforderten Jahr
+                        tmp = null;                          // Feiertag liegt nicht im geforderten Jahr
                     }
                 }
             } else {
-                //Feiertag abhaengig von Ostern
-                tmp = (GregorianCalendar) easter.clone();
+                // Feiertag abhaengig von Ostern
+                tmp = (GregorianCalendar)easter.clone();
                 tmp.add(GregorianCalendar.DATE, singleHoliday.getTime().getDaysAfterEaster());
             }
             if (tmp != null) {
@@ -117,12 +165,13 @@ public class HolidayEvaluator {
     /**
      * calculates the number of holidays between 2 Dates (including the interval bounds).
      *
-     * @param fromDate
-     * @param toDate
-     * @return
+     * @param   fromDate  DOCUMENT ME!
+     * @param   toDate    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public int getNumberOfHolidaysOnWeekDays(GregorianCalendar fromDate, GregorianCalendar toDate) {
-        //calculate the number of years
+    public int getNumberOfHolidaysOnWeekDays(final GregorianCalendar fromDate, final GregorianCalendar toDate) {
+        // calculate the number of years
         final int fromYear = fromDate.get(GregorianCalendar.YEAR);
         final int toYear = toDate.get(GregorianCalendar.YEAR);
         int holidays = 0;
@@ -132,12 +181,12 @@ public class HolidayEvaluator {
                 calculateHolidays(i);
             }
             holidays += this.holidays.size();
-            //dont count Holidays that are on saturday or sunday
-            if (i != fromYear && i != toYear) {
-                for (Holiday h : this.holidays) {
+            // dont count Holidays that are on saturday or sunday
+            if ((i != fromYear) && (i != toYear)) {
+                for (final Holiday h : this.holidays) {
                     final int dayOfWeek = h.getDate().get(GregorianCalendar.DAY_OF_WEEK);
 
-                    if (dayOfWeek == GregorianCalendar.SATURDAY || dayOfWeek == GregorianCalendar.SUNDAY) {
+                    if ((dayOfWeek == GregorianCalendar.SATURDAY) || (dayOfWeek == GregorianCalendar.SUNDAY)) {
                         holidays--;
                     }
                 }
@@ -147,17 +196,17 @@ public class HolidayEvaluator {
             if (i == fromYear) {
                 final int insertionIndex = Collections.binarySearch(this.holidays, new Holiday(fromDate));
                 if (insertionIndex >= 0) {
-                    //holiday found
+                    // holiday found
                     holidays -= insertionIndex;
                 } else {
                     holidays -= -(insertionIndex + 1);
                 }
 
-
-                for (int j = insertionIndex >= 0 ? insertionIndex : -(insertionIndex + 1); j < this.holidays.size(); j++) {
+                for (int j = (insertionIndex >= 0) ? insertionIndex : -(insertionIndex + 1); j < this.holidays.size();
+                            j++) {
                     final Holiday h = this.holidays.get(j);
                     final int dayOfWeek = h.getDate().get(GregorianCalendar.DAY_OF_WEEK);
-                    if (dayOfWeek == GregorianCalendar.SATURDAY || dayOfWeek == GregorianCalendar.SUNDAY) {
+                    if ((dayOfWeek == GregorianCalendar.SATURDAY) || (dayOfWeek == GregorianCalendar.SUNDAY)) {
                         if (h.getDate().before(toDate)) {
                             holidays--;
                         }
@@ -168,44 +217,52 @@ public class HolidayEvaluator {
                 final int insertionIndex = Collections.binarySearch(this.holidays, new Holiday(toDate));
 
                 if (insertionIndex >= 0) {
-                    //holiday found
+                    // holiday found
                     holidays -= (this.holidays.size() - (insertionIndex + 1));
                 } else {
                     holidays -= this.holidays.size() + (insertionIndex + 1);
                 }
 
-                for (int j = insertionIndex >= 0 ? insertionIndex : -insertionIndex; j >= 0; j--) {
+                for (int j = (insertionIndex >= 0) ? insertionIndex : -insertionIndex; j >= 0; j--) {
                     final Holiday h = this.holidays.get(j);
                     final int dayOfWeek = h.getDate().get(GregorianCalendar.DAY_OF_WEEK);
-                    if (dayOfWeek == GregorianCalendar.SATURDAY || dayOfWeek == GregorianCalendar.SUNDAY) {
+                    if ((dayOfWeek == GregorianCalendar.SATURDAY) || (dayOfWeek == GregorianCalendar.SUNDAY)) {
                         if (h.getDate().after(fromDate)) {
                             holidays--;
                         }
                     }
                 }
             }
-
         }
 
         return holidays;
     }
 
     /**
-     * berechnet den Ostersonntag und liefert diesen als Rueckgabewert
+     * berechnet den Ostersonntag und liefert diesen als Rueckgabewert.
+     *
+     * @param   year  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    private GregorianCalendar getEaster(int year) {
-        int D;
-        GregorianCalendar easter;
-        D = (((255 - 11 * (year % 19)) - 21) % 30) + 21;
+    private GregorianCalendar getEaster(final int year) {
+        final int D;
+        final GregorianCalendar easter;
+        D = (((255 - (11 * (year % 19))) - 21) % 30) + 21;
         easter = new GregorianCalendar(year, 3 - 1, 1);
-        int days = D + ((D > 48) ? 1 : 0) + 6 - ((year + year / 4 + D + ((D > 48) ? 1 : 0) + 1) % 7);
+        final int days = D + ((D > 48) ? 1 : 0) + 6 - ((year + (year / 4) + D + ((D > 48) ? 1 : 0) + 1) % 7);
         easter.add(GregorianCalendar.DATE, days);
         return easter;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     private HolidayConfiguration getConfiguration() {
         HolidayConfiguration configFile = null;
-        InputStream is = getClass().getResourceAsStream(CONFIG_FILE);
+        final InputStream is = getClass().getResourceAsStream(CONFIG_FILE);
 
 //        BufferedReader br = new BufferedReader( new InputStreamReader(is) );
 //        String tmp = "";

@@ -1,7 +1,15 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.projecttracker.report.db.entities;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +19,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 @Entity
-@Table(name = "cost_category", schema = "public")
+@Table(
+    name = "cost_category",
+    schema = "public"
+)
 public class CostCategory extends BasicHibernateEntity {
+
+    //~ Instance fields --------------------------------------------------------
+
     private String name;
     private Project project;
     private String description;
@@ -22,10 +41,30 @@ public class CostCategory extends BasicHibernateEntity {
     private Set<ProjectCosts> projectCosts = new HashSet<ProjectCosts>(0);
     private Set<WorkPackage> workPackages = new HashSet<WorkPackage>(0);
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new CostCategory object.
+     */
     public CostCategory() {
     }
 
-    public CostCategory(long id, String name, Project project, String description, double fundingrate, double vat) {
+    /**
+     * Creates a new CostCategory object.
+     *
+     * @param  id           DOCUMENT ME!
+     * @param  name         DOCUMENT ME!
+     * @param  project      DOCUMENT ME!
+     * @param  description  DOCUMENT ME!
+     * @param  fundingrate  DOCUMENT ME!
+     * @param  vat          DOCUMENT ME!
+     */
+    public CostCategory(final long id,
+            final String name,
+            final Project project,
+            final String description,
+            final double fundingrate,
+            final double vat) {
         this.id = id;
         this.name = name;
         this.project = project;
@@ -34,7 +73,26 @@ public class CostCategory extends BasicHibernateEntity {
         this.vat = vat;
     }
 
-    public CostCategory(long id, String name, Project project, String description, double fundingrate, double vat, Set<ProjectCosts> projectCosts, Set<WorkPackage> workPackages) {
+    /**
+     * Creates a new CostCategory object.
+     *
+     * @param  id            DOCUMENT ME!
+     * @param  name          DOCUMENT ME!
+     * @param  project       DOCUMENT ME!
+     * @param  description   DOCUMENT ME!
+     * @param  fundingrate   DOCUMENT ME!
+     * @param  vat           DOCUMENT ME!
+     * @param  projectCosts  DOCUMENT ME!
+     * @param  workPackages  DOCUMENT ME!
+     */
+    public CostCategory(final long id,
+            final String name,
+            final Project project,
+            final String description,
+            final double fundingrate,
+            final double vat,
+            final Set<ProjectCosts> projectCosts,
+            final Set<WorkPackage> workPackages) {
         this.id = id;
         this.name = name;
         this.project = project;
@@ -45,69 +103,164 @@ public class CostCategory extends BasicHibernateEntity {
         this.vat = vat;
     }
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "projectid", nullable = false)
+    @JoinColumn(
+        name = "projectid",
+        nullable = false
+    )
     public Project getProject() {
         return this.project;
     }
 
-    public void setProject(Project project) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  project  DOCUMENT ME!
+     */
+    public void setProject(final Project project) {
         this.project = project;
     }
 
-    @Column(name = "description", nullable = true)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "description",
+        nullable = true
+    )
     public String getDescription() {
         return this.description;
     }
 
-    public void setDescription(String description) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  description  DOCUMENT ME!
+     */
+    public void setDescription(final String description) {
         this.description = description;
     }
 
-    @Column(name = "name", nullable = false)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "name",
+        nullable = false
+    )
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  name  DOCUMENT ME!
+     */
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Column(name = "fundingrate", nullable = false, precision = 6)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "fundingrate",
+        nullable = false,
+        precision = 6
+    )
     public double getFundingrate() {
         return this.fundingrate;
     }
 
-    public void setFundingrate(double fundingrate) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  fundingrate  DOCUMENT ME!
+     */
+    public void setFundingrate(final double fundingrate) {
         this.fundingrate = fundingrate;
     }
 
-    @Column(name = "vat", nullable = false, precision = 4)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "vat",
+        nullable = false,
+        precision = 4
+    )
     public double getVat() {
         return this.vat;
     }
 
-    public void setVat(double vat) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  vat  DOCUMENT ME!
+     */
+    public void setVat(final double vat) {
         this.vat = vat;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cost_category")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER,
+        mappedBy = "cost_category"
+    )
     public Set<ProjectCosts> getProjectCosts() {
         return this.projectCosts;
     }
 
-    public void setProjectCosts(Set<ProjectCosts> projectCosts) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  projectCosts  DOCUMENT ME!
+     */
+    public void setProjectCosts(final Set<ProjectCosts> projectCosts) {
         this.projectCosts = projectCosts;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cost_category")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER,
+        mappedBy = "cost_category"
+    )
     public Set<WorkPackage> getWorkPackages() {
         return this.workPackages;
     }
 
-    public void setWorkPackages(Set<WorkPackage> workPackages) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  workPackages  DOCUMENT ME!
+     */
+    public void setWorkPackages(final Set<WorkPackage> workPackages) {
         this.workPackages = workPackages;
     }
 }
-
-

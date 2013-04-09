@@ -1,12 +1,17 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.projecttracker.report.db.entities;
 
-
-import de.cismet.projecttracker.report.commons.TimePeriod;
-import de.cismet.projecttracker.report.helper.QueryHelper;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,12 +22,24 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import de.cismet.projecttracker.report.commons.TimePeriod;
+import de.cismet.projecttracker.report.helper.QueryHelper;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 @Entity
-@Table(name="project"
-    ,schema="public"
-    , uniqueConstraints = @UniqueConstraint(columnNames="name")
+@Table(
+    name = "project",
+    schema = "public",
+    uniqueConstraints = @UniqueConstraint(columnNames = "name")
 )
 public class Project extends BasicHibernateEntity {
+
+    //~ Instance fields --------------------------------------------------------
+
     private ProjectBody projectBody;
     private ProjectCategory projectCategory;
     private Project project;
@@ -42,226 +59,519 @@ public class Project extends BasicHibernateEntity {
     private Set<WorkPackage> workPackages = new HashSet<WorkPackage>(0);
     private Set<ProjectComponentTag> projectComponentTags = new HashSet<ProjectComponentTag>(0);
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new Project object.
+     */
     public Project() {
     }
 
-
-    public Project(long id, String name) {
+    /**
+     * Creates a new Project object.
+     *
+     * @param  id    DOCUMENT ME!
+     * @param  name  DOCUMENT ME!
+     */
+    public Project(final long id, final String name) {
         this.id = id;
         this.name = name;
     }
-    
-    public Project(long id, Staff responsiblestaff, ProjectBody projectBody, Project project, String name, double hoursofamanday, double daysofamanmonth, boolean overtimehoursallowed, String description, double overheadratio, double warnlevel, double criticallevel, double fullstoplevel, Set<Project> projects, Set<ProjectPeriod> projectPeriods, Set<CostCategory> costCategories, Set<WorkPackage> workPackages, Set<ProjectComponentTag> projectComponentTags, ProjectCategory projectCategory) {
-       this.id = id;
-       this.responsiblestaff = responsiblestaff;
-       this.projectBody = projectBody;
-       this.project = project;
-       this.name = name;
-       this.description = description;
-       this.overheadratio = overheadratio;
-       this.projects = projects;
-       this.projectPeriods = projectPeriods;
-       this.costCategories = costCategories;
-       this.workPackages = workPackages;
-       this.projectCategory = projectCategory;
-       this.projectComponentTags = projectComponentTags;
-       this.hoursofamanday = hoursofamanday;
-       this.daysofamanmonth = daysofamanmonth;
-       this.overtimehoursallowed = overtimehoursallowed;
-       this.warnlevel = warnlevel;
-       this.criticallevel = criticallevel;
-       this.fullstoplevel = fullstoplevel;
+
+    /**
+     * Creates a new Project object.
+     *
+     * @param  id                    DOCUMENT ME!
+     * @param  responsiblestaff      DOCUMENT ME!
+     * @param  projectBody           DOCUMENT ME!
+     * @param  project               DOCUMENT ME!
+     * @param  name                  DOCUMENT ME!
+     * @param  hoursofamanday        DOCUMENT ME!
+     * @param  daysofamanmonth       DOCUMENT ME!
+     * @param  overtimehoursallowed  DOCUMENT ME!
+     * @param  description           DOCUMENT ME!
+     * @param  overheadratio         DOCUMENT ME!
+     * @param  warnlevel             DOCUMENT ME!
+     * @param  criticallevel         DOCUMENT ME!
+     * @param  fullstoplevel         DOCUMENT ME!
+     * @param  projects              DOCUMENT ME!
+     * @param  projectPeriods        DOCUMENT ME!
+     * @param  costCategories        DOCUMENT ME!
+     * @param  workPackages          DOCUMENT ME!
+     * @param  projectComponentTags  DOCUMENT ME!
+     * @param  projectCategory       DOCUMENT ME!
+     */
+    public Project(final long id,
+            final Staff responsiblestaff,
+            final ProjectBody projectBody,
+            final Project project,
+            final String name,
+            final double hoursofamanday,
+            final double daysofamanmonth,
+            final boolean overtimehoursallowed,
+            final String description,
+            final double overheadratio,
+            final double warnlevel,
+            final double criticallevel,
+            final double fullstoplevel,
+            final Set<Project> projects,
+            final Set<ProjectPeriod> projectPeriods,
+            final Set<CostCategory> costCategories,
+            final Set<WorkPackage> workPackages,
+            final Set<ProjectComponentTag> projectComponentTags,
+            final ProjectCategory projectCategory) {
+        this.id = id;
+        this.responsiblestaff = responsiblestaff;
+        this.projectBody = projectBody;
+        this.project = project;
+        this.name = name;
+        this.description = description;
+        this.overheadratio = overheadratio;
+        this.projects = projects;
+        this.projectPeriods = projectPeriods;
+        this.costCategories = costCategories;
+        this.workPackages = workPackages;
+        this.projectCategory = projectCategory;
+        this.projectComponentTags = projectComponentTags;
+        this.hoursofamanday = hoursofamanday;
+        this.daysofamanmonth = daysofamanmonth;
+        this.overtimehoursallowed = overtimehoursallowed;
+        this.warnlevel = warnlevel;
+        this.criticallevel = criticallevel;
+        this.fullstoplevel = fullstoplevel;
     }
 
+    //~ Methods ----------------------------------------------------------------
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="projectbodyid")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "projectbodyid")
     public ProjectBody getProjectBody() {
         return this.projectBody;
     }
 
-    public void setProjectBody(ProjectBody projectBody) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  projectBody  DOCUMENT ME!
+     */
+    public void setProjectBody(final ProjectBody projectBody) {
         this.projectBody = projectBody;
     }
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="categoryid")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "categoryid")
     public ProjectCategory getProjectCategory() {
         return this.projectCategory;
     }
 
-    public void setProjectCategory(ProjectCategory projectCategory) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  projectCategory  DOCUMENT ME!
+     */
+    public void setProjectCategory(final ProjectCategory projectCategory) {
         this.projectCategory = projectCategory;
     }
 
-
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="parentproject")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parentproject")
     public Project getProject() {
         return this.project;
     }
 
-    public void setProject(Project project) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  project  DOCUMENT ME!
+     */
+    public void setProject(final Project project) {
         this.project = project;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "responsiblestaff", nullable = true)
+    @JoinColumn(
+        name = "responsiblestaff",
+        nullable = true
+    )
     public Staff getResponsiblestaff() {
         return this.responsiblestaff;
     }
 
-    public void setResponsiblestaff(Staff responsiblestaff) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  responsiblestaff  DOCUMENT ME!
+     */
+    public void setResponsiblestaff(final Staff responsiblestaff) {
         this.responsiblestaff = responsiblestaff;
     }
 
-    @Column(name="name", unique=true, nullable=false, length=50)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "name",
+        unique = true,
+        nullable = false,
+        length = 50
+    )
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  name  DOCUMENT ME!
+     */
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Column(name="description")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(name = "description")
     public String getDescription() {
         return this.description;
     }
 
-    public void setDescription(String description) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  description  DOCUMENT ME!
+     */
+    public void setDescription(final String description) {
         this.description = description;
     }
 
-    @Column(name="overheadratio", precision=6)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "overheadratio",
+        precision = 6
+    )
     public double getOverheadratio() {
         return this.overheadratio;
     }
 
-    public void setOverheadratio(double overheadratio) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  overheadratio  DOCUMENT ME!
+     */
+    public void setOverheadratio(final double overheadratio) {
         this.overheadratio = overheadratio;
     }
 
-    @Column(name="hoursofamanday", precision=6)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "hoursofamanday",
+        precision = 6
+    )
     public double getHoursofamanday() {
         return this.hoursofamanday;
     }
 
-    public void setHoursofamanday(double hoursofamanday) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  hoursofamanday  DOCUMENT ME!
+     */
+    public void setHoursofamanday(final double hoursofamanday) {
         this.hoursofamanday = hoursofamanday;
     }
 
-    @Column(name="daysofamanmonth", precision=6)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "daysofamanmonth",
+        precision = 6
+    )
     public double getDaysofamanmonth() {
         return this.daysofamanmonth;
     }
 
-    public void setDaysofamanmonth(double daysofamanmonth) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  daysofamanmonth  DOCUMENT ME!
+     */
+    public void setDaysofamanmonth(final double daysofamanmonth) {
         this.daysofamanmonth = daysofamanmonth;
     }
 
-    @Column(name="overtimehoursallowed", precision=6)
-    public boolean  getOvertimehoursallowed() {
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "overtimehoursallowed",
+        precision = 6
+    )
+    public boolean getOvertimehoursallowed() {
         return this.overtimehoursallowed;
     }
 
-    @Column(name="warnlevel", nullable=true, precision=10)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "warnlevel",
+        nullable = true,
+        precision = 10
+    )
     public double getWarnlevel() {
         return this.warnlevel;
     }
 
-    public void setWarnlevel(double warnlevel) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  warnlevel  DOCUMENT ME!
+     */
+    public void setWarnlevel(final double warnlevel) {
         this.warnlevel = warnlevel;
     }
 
-    @Column(name="criticallevel", nullable=true, precision=10)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "criticallevel",
+        nullable = true,
+        precision = 10
+    )
     public double getCriticallevel() {
         return this.criticallevel;
     }
 
-    public void setCriticallevel(double criticallevel) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  criticallevel  DOCUMENT ME!
+     */
+    public void setCriticallevel(final double criticallevel) {
         this.criticallevel = criticallevel;
     }
 
-    @Column(name="fullstoplevel", nullable=true, precision=10)
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Column(
+        name = "fullstoplevel",
+        nullable = true,
+        precision = 10
+    )
     public double getFullstoplevel() {
         return this.fullstoplevel;
     }
 
-    public void setFullstoplevel(double fullstoplevel) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  fullstoplevel  DOCUMENT ME!
+     */
+    public void setFullstoplevel(final double fullstoplevel) {
         this.fullstoplevel = fullstoplevel;
     }
 
-    public void setOvertimehoursallowed(boolean overtimehoursallowed) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  overtimehoursallowed  DOCUMENT ME!
+     */
+    public void setOvertimehoursallowed(final boolean overtimehoursallowed) {
         this.overtimehoursallowed = overtimehoursallowed;
     }
 
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="project")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER,
+        mappedBy = "project"
+    )
     public Set<Project> getProjects() {
         return this.projects;
     }
 
-    public void setProjects(Set<Project> projects) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  projects  DOCUMENT ME!
+     */
+    public void setProjects(final Set<Project> projects) {
         this.projects = projects;
     }
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="project")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER,
+        mappedBy = "project"
+    )
     public Set<ProjectPeriod> getProjectPeriods() {
         return this.projectPeriods;
     }
 
-    public void setProjectPeriods(Set<ProjectPeriod> projectPeriods) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  projectPeriods  DOCUMENT ME!
+     */
+    public void setProjectPeriods(final Set<ProjectPeriod> projectPeriods) {
         this.projectPeriods = projectPeriods;
     }
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="project")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER,
+        mappedBy = "project"
+    )
     public Set<CostCategory> getCostCategories() {
         return this.costCategories;
     }
 
-    public void setCostCategories(Set<CostCategory> costCategories) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  costCategories  DOCUMENT ME!
+     */
+    public void setCostCategories(final Set<CostCategory> costCategories) {
         this.costCategories = costCategories;
     }
 
-
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="project")
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER,
+        mappedBy = "project"
+    )
     public Set<WorkPackage> getWorkPackages() {
         return this.workPackages;
     }
 
-    public void setWorkPackages(Set<WorkPackage> workPackages) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  workPackages  DOCUMENT ME!
+     */
+    public void setWorkPackages(final Set<WorkPackage> workPackages) {
         this.workPackages = workPackages;
     }
-    
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="project")
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.LAZY,
+        mappedBy = "project"
+    )
     public Set<ProjectComponentTag> getProjectComponentTags() {
         return this.projectComponentTags;
     }
 
-    public void setProjectComponentTags(Set<ProjectComponentTag> projectComponentTags) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  projectComponentTags  DOCUMENT ME!
+     */
+    public void setProjectComponentTags(final Set<ProjectComponentTag> projectComponentTags) {
         this.projectComponentTags = projectComponentTags;
     }
 
-
     /**
+     * DOCUMENT ME!
      *
-     * @param cal
-     * @return
-     * @throws IllegalArgumentException if the given date is not within the most recent project period
+     * @param   date  cal
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  if the given date is not within the most recent project period
      */
-    public int getProjectQuarter(Date date) throws IllegalArgumentException {
-        int projectQuarter = ( (getProjectMonth(date) - 1) / 3);
+    public int getProjectQuarter(final Date date) throws IllegalArgumentException {
+        final int projectQuarter = ((getProjectMonth(date) - 1) / 3);
 
         return projectQuarter + 1;
     }
-    
 
-    public int getProjectMonth(Date date) throws IllegalArgumentException {
-        ProjectPeriod period = QueryHelper.getMostRecentPeriod( this );
-        Date start = period.getFromdate();
-        int year = date.getYear() - start.getYear();
-        int months = date.getMonth() - start.getMonth();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   date  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
+     */
+    public int getProjectMonth(final Date date) throws IllegalArgumentException {
+        final ProjectPeriod period = QueryHelper.getMostRecentPeriod(this);
+        final Date start = period.getFromdate();
+        final int year = date.getYear() - start.getYear();
+        final int months = date.getMonth() - start.getMonth();
         int day = 1;
 
-        if ((period.getTodate() != null && date.getTime() > period.getTodate().getTime()) || date.getTime() < period.getFromdate().getTime()) {
+        if (((period.getTodate() != null) && (date.getTime() > period.getTodate().getTime()))
+                    || (date.getTime() < period.getFromdate().getTime())) {
             throw new IllegalArgumentException();
         }
 
@@ -272,28 +582,36 @@ public class Project extends BasicHibernateEntity {
         return months + (year * 12) + day;
     }
 
-    
-    public TimePeriod getTimeperiodOfMonth(int month) throws IllegalArgumentException {
-        TimePeriod period = new TimePeriod();
-        ProjectPeriod mostRecentPeriod = QueryHelper.getMostRecentPeriod( this );
-        GregorianCalendar newBegin = new GregorianCalendar();
-        GregorianCalendar end = new GregorianCalendar();
-        
-        newBegin.setTime( mostRecentPeriod.getFromdate() );
-        end.setTime( mostRecentPeriod.getTodate() );
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   month  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
+     */
+    public TimePeriod getTimeperiodOfMonth(final int month) throws IllegalArgumentException {
+        final TimePeriod period = new TimePeriod();
+        final ProjectPeriod mostRecentPeriod = QueryHelper.getMostRecentPeriod(this);
+        final GregorianCalendar newBegin = new GregorianCalendar();
+        final GregorianCalendar end = new GregorianCalendar();
+
+        newBegin.setTime(mostRecentPeriod.getFromdate());
+        end.setTime(mostRecentPeriod.getTodate());
         newBegin.add(GregorianCalendar.MONTH, month - 1);
 
         if (newBegin.after(end)) {
             throw new IllegalArgumentException();
         }
 
-        GregorianCalendar newEnd = (GregorianCalendar)newBegin.clone();
+        final GregorianCalendar newEnd = (GregorianCalendar)newBegin.clone();
         newEnd.add(GregorianCalendar.MONTH, 1);
         newEnd.add(GregorianCalendar.DATE, -1);
 
         period.setStart(newBegin);
 
-        if ( end.after( end ) ) {
+        if (end.after(end)) {
             period.setEnd(end);
         } else {
             period.setEnd(newEnd);
@@ -302,5 +620,3 @@ public class Project extends BasicHibernateEntity {
         return period;
     }
 }
-
-
