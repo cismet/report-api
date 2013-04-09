@@ -59,9 +59,15 @@ public class ReportManager {
     private URLClassLoader urlc;
     private ResourceBundle config;
 
+    //~ Constructors -----------------------------------------------------------
 
-    /** Creates a new instance of PluginCore */
-    public ReportManager(String applicationPath, String applicationConfDir) {
+    /**
+     * Creates a new instance of PluginCore.
+     *
+     * @param  applicationPath     DOCUMENT ME!
+     * @param  applicationConfDir  DOCUMENT ME!
+     */
+    public ReportManager(final String applicationPath, final String applicationConfDir) {
         this.applicationPath = applicationPath;
         confDir = applicationConfDir;
         initAvailableReports();
@@ -108,13 +114,13 @@ public class ReportManager {
             if (createdReport != null) {
                 // todo das Speichern des Reports in die Report API auslagern
                 // write the new report to the db
-                DBManager manager = new DBManager(confDir);
-                Report reportEntry = new Report();
-                reportEntry.setCreationtime( new Date() );
-                reportEntry.setFromdate( start.getTime() );
-                reportEntry.setTodate( end.getTime() );
-                reportEntry.setName( name );
-                reportEntry.setGeneratorname( report.getReportName() );
+                final DBManager manager = new DBManager(confDir);
+                final Report reportEntry = new Report();
+                reportEntry.setCreationtime(new Date());
+                reportEntry.setFromdate(start.getTime());
+                reportEntry.setTodate(end.getTime());
+                reportEntry.setName(name);
+                reportEntry.setGeneratorname(report.getReportName());
                 reportEntry.setReportdocument(createdReport);
                 if (staffID != 0) {
                     final Staff staff = (Staff)manager.getObject(Staff.class, staffID);
