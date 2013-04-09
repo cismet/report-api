@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+//import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 
 /**
@@ -36,15 +37,18 @@ public class ReportManager {
     private final String REPORT_PATH = "WEB-INF/reports";
     private final String REPORT_PACKAGE = "de.cismet.projecttracker.report";
     private String applicationPath;
+    private String confDir;
     private ProjectTrackerReport[] reports;
     private URLClassLoader urlc;
     private ResourceBundle config;
 
 
     /** Creates a new instance of PluginCore */
-    public ReportManager(String applicationPath) {
+    public ReportManager(String applicationPath, String applicationConfDir) {
         this.applicationPath = applicationPath;
+        confDir = applicationConfDir;
         initAvailableReports();
+//        ServletContext context = getServletContext();
         this.config = ResourceBundle.getBundle("de.cismet.projecttracker.report.commons.ReportAPIConfig");
     }
 
@@ -76,7 +80,7 @@ public class ReportManager {
             if (createdReport != null) {
                 //todo das Speichern des Reports in die Report API auslagern
                 // write the new report to the db
-                DBManager manager = new DBManager();
+                DBManager manager = new DBManager(confDir);
                 Report reportEntry = new Report();
                 reportEntry.setCreationtime( new Date() );
                 reportEntry.setFromdate( start.getTime() );

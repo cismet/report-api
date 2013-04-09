@@ -1,10 +1,12 @@
 package de.cismet.projecttracker.report.query;
 
 import de.cismet.projecttracker.report.exceptions.DataRetrievalException;
+import java.io.FileReader;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.List;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javax.persistence.Table;
 import org.apache.log4j.Logger;
@@ -22,10 +24,11 @@ import org.hibernate.criterion.Restrictions;
 public class DBManager {
     private static Logger logger = Logger.getLogger(DBManager.class);
     protected Session hibernateSession;
+    private final String CONF_BASE_DIR;
 
-
-    public DBManager() {
-        hibernateSession = HibernateUtil.getSession();
+    public DBManager(String confBaseDir) {
+        CONF_BASE_DIR = confBaseDir;
+        hibernateSession = HibernateUtil.getSession(confBaseDir);
     }
 
     /**
@@ -43,9 +46,12 @@ public class DBManager {
     
     public Connection getDatabaseConnection() {
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle("de.cismet.projecttracker.report.query.database");
-            Class.forName(bundle.getString("driver"));
-            return DriverManager.getConnection(bundle.getString("path"), bundle.getString("user"), bundle.getString("password"));
+           Properties dbConnProp = new Properties();
+           final FileReader fr = new FileReader(CONF_BASE_DIR+System.getProperty("file.separator")+"database.properties");
+           dbConnProp.load(fr);
+           
+            Class.forName(dbConnProp.getProperty("driver"));
+            return DriverManager.getConnection(dbConnProp.getProperty("path"), dbConnProp.getProperty("user"), dbConnProp.getProperty("password"));
         } catch(Exception e){
             logger.error("Cannot open database connection.", e);
         }
