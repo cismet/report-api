@@ -16,6 +16,13 @@
     
     <name>Projecttracker Report API</name>
     <description>!!! DESCRIPTION PENDING !!!</description>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <distribution>repo</distribution>
+            <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+        </license>
+    </licenses>
 
     <dependencies>
         <dependency>
