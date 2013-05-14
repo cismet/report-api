@@ -22,7 +22,7 @@
       <column name="responsiblestaff" not-null="false"/>
     </many-to-one>
     <property name="name" type="string">
-      <column length="50" name="name" not-null="true"/>
+      <column name="name" not-null="true"/>
     </property>
     <property name="abbreviation" type="string">
       <column length="50" name="abbreviation" not-null="false"/>
