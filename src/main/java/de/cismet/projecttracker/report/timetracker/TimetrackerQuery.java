@@ -13,9 +13,13 @@ package de.cismet.projecttracker.report.timetracker;
 
 import org.apache.log4j.Logger;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import de.cismet.projecttracker.report.db.entities.Staff;
@@ -45,26 +49,37 @@ public class TimetrackerQuery {
     private ResourceBundle config;
     private Database db;
     private Query query;
+    private final String CONF_BASE_DIR;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new TimetrackerQuery object.
+     *
+     * @param  confBaseDir  DOCUMENT ME!
      */
-    public TimetrackerQuery() {
+    public TimetrackerQuery(final String confBaseDir) {
+        this.CONF_BASE_DIR = confBaseDir;
+        final Properties dbConnProp = new Properties();
+        final FileReader fr;
         try {
-            this.config = ResourceBundle.getBundle("de.cismet.projecttracker.report.commons.ReportAPIConfig");
-            final ResourceBundle bundle = ResourceBundle.getBundle(
-                    "de.cismet.projecttracker.report.timetracker.timetracker");
-            final String drivername = bundle.getString("driver");
-            final String url = bundle.getString("url");
-            final String user = bundle.getString("user");
-            final String pwd = bundle.getString("pwd");
-            db = new Database(drivername, url, user, pwd);
-            query = new Query(db);
-        } catch (final MissingResourceException e) {
-            logger.error("Cannot read timetracker configuration.", e);
+            fr = new FileReader(CONF_BASE_DIR + System.getProperty("file.separator")
+                            + "timetracker.properties");
+            dbConnProp.load(fr);
+        } catch (FileNotFoundException ex) {
+            logger.error("Cannot read timetracker configuration.", ex);
+        } catch (IOException ex) {
+            logger.error("Cannot read timetracker configuration.", ex);
         }
+
+        this.config = ResourceBundle.getBundle("de.cismet.projecttracker.report.commons.ReportAPIConfig");
+
+        final String drivername = (String)dbConnProp.get("driver");
+        final String url = (String)dbConnProp.get("url");
+        final String user = (String)dbConnProp.get("user");
+        final String pwd = (String)dbConnProp.get("pwd");
+        db = new Database(drivername, url, user, pwd);
+        query = new Query(db);
     }
 
     //~ Methods ----------------------------------------------------------------
