@@ -1,4 +1,4 @@
-report-api
+report-api [![Build Status](http://ci.cismet.de/buildStatus/icon?job=report-api)](https://ci.cismet.de/job/report-api/)
 ==========
 
 License
