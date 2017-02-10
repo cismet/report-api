@@ -61,7 +61,7 @@ public class HolidayEvaluator {
      *
      * @return  DOCUMENT ME!
      */
-    public int isHoliday(final GregorianCalendar day) {
+    public synchronized int isHoliday(final GregorianCalendar day) {
         final Holiday hol = getHolidayForDay(day);
 
         if (hol != null) {
@@ -82,7 +82,7 @@ public class HolidayEvaluator {
      *
      * @return  DOCUMENT ME!
      */
-    public String getNameOfHoliday(final GregorianCalendar day) {
+    public synchronized String getNameOfHoliday(final GregorianCalendar day) {
         final Holiday hol = getHolidayForDay(day);
 
         if (hol != null) {
@@ -170,7 +170,7 @@ public class HolidayEvaluator {
      *
      * @return  DOCUMENT ME!
      */
-    public int getNumberOfHolidaysOnWeekDays(final GregorianCalendar fromDate, final GregorianCalendar toDate) {
+    public synchronized int getNumberOfHolidaysOnWeekDays(final GregorianCalendar fromDate, final GregorianCalendar toDate) {
         // calculate the number of years
         final int fromYear = fromDate.get(GregorianCalendar.YEAR);
         final int toYear = toDate.get(GregorianCalendar.YEAR);

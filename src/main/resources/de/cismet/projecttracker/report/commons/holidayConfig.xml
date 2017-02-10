@@ -128,5 +128,15 @@
             </hc:fixDate>
         </hc:time>
     </hc:holiday>
+    <hc:holiday>
+        <hc:name>Reformationstag</hc:name>
+        <hc:isHalfHoliday>false</hc:isHalfHoliday>
+        <hc:time>
+            <hc:fixDate>
+                <hc:date>2017-10-31</hc:date>
+                <hc:isEveryYear>false</hc:isEveryYear>
+            </hc:fixDate>
+        </hc:time>
+    </hc:holiday>
 
 </hc:holidayConfig>
